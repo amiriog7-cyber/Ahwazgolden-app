@@ -43,7 +43,16 @@ jobs:
           }
           EOF
       - name: Build APK
-        run: ./gradlew assembleDebug --stacktrace
+        run: |
+          cat > gradlew << 'GRADLEW'
+          #!/bin/sh
+          CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
+          exec java -jar gradle/wrapper/gradle-wrapper.jar "$@"
+          GRADLEW
+          
+          wget -q https://services.gradle.org/distributions/gradle-8.1.1-bin.zip -O /tmp/gradle.zip
+          sudo unzip -q /tmp/gradle.zip -d /opt/gradle
+          /opt/gradle/gradle-8.1.1/bin/gradle assembleDebug --stacktrace
       - uses: actions/upload-artifact@v4
         with:
           name: AhwazGolden-Calculator
