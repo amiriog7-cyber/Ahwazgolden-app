@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>ماشین حساب طلا - اهواز گلدن</title>
+  <style>
+    :root {
+      --gold: #d4af37;
+      --dark: #2c3e50;
+      --success: #27ae60;
+      --error: #c0392b;
+      --light-text: #7f8c8d;
+      --border: #ecf0f1;
+      --text: #34495e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Tahoma, sans-serif;
+      direction: rtl;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+    }
+    .app-header {
+      background: linear-gradient(135deg, var(--dark), #1a252f);
+      border-bottom: 3px solid var(--gold);
+      padding: 16px;
+      text-align: center;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .app-header h1 { color: var(--gold); font-size: 18px; }
+    .app-header p { color: rgba(255,255,255,0.6); font-size: 11px; margin-top: 4px; }
+    .content { padding: 16px; max-width: 600px; margin: 0 auto; }
+    .card {
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      margin-bottom: 14px;
+    }
+    .card-head {
+      background: linear-gradient(135deg, var(--dark), #34495e);
+      color: white; text-align: center;
+      padding: 14px; font-size: 15px; font-weight: bold;
+      border-bottom: 3px solid var(--gold);
+    }
+    .card-body { padding: 18px; background: #d8f8fb; }
+    .input-group { margin-bottom: 13px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; color: var(--dark); font-size: 13px; }
+    input {
+      width: 100%; padding: 12px 14px;
+      border: 2px solid var(--border); border-radius: 10px;
+      font-size: 15px; font-family: Tahoma, sans-serif;
+      background: white; color: var(--text);
+      -webkit-appearance: none; transition: border 0.2s;
+    }
+    input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,0.15); }
+    .input-group.error input { border-color: var(--error); background: #fff6f6; }
+    .input-group.success input { border-color: var(--success); background: #f6fff6; }
+    .input-error { color: var(--error); font-size: 11px; margin-top: 3px; display: none; }
+    .buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+    button {
+      font-family: Tahoma, sans-serif; border: none; border-radius: 10px;
+      font-size: 14px; font-weight: bold; cursor: pointer;
+      padding: 13px; transition: all 0.2s; -webkit-tap-highlight-color: transparent;
+    }
+    button:active { transform: scale(0.97); }
+    .btn-calc { background: linear-gradient(135deg, var(--gold), #c9a236); color: var(--dark); }
+    .btn-reset { background: linear-gradient(135deg, #636e72, #2d3436); color: white; }
+    .error-box {
+      background: #fff6f6; border: 2px solid var(--error);
+      border-radius: 10px; padding: 12px; text-align: center;
+      color: var(--error); font-size: 13px; display: none; margin-bottom: 10px;
+    }
+    .loading { display: none; text-align: center; padding: 16px; }
+    .spinner {
+      width: 34px; height: 34px; border: 4px solid var(--border);
+      border-top-color: var(--gold); border-radius: 50%;
+      animation: spin 0.8s linear infinite; margin: 0 auto 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .result-head {
+      background: linear-gradient(135deg, var(--success), #219a52);
+      color: white; text-align: center; padding: 13px; font-weight: bold;
+    }
+    .result-body { padding: 18px; }
+    .price-box {
+      text-align: center; background: #f9f9f9;
+      border: 2px solid var(--gold); border-radius: 14px; padding: 16px; margin-bottom: 14px;
+    }
+    .price-label { font-size: 12px; color: var(--light-text); margin-bottom: 6px; }
+    .price-value { font-size: 26px; font-weight: bold; color: var(--success); }
+    .break-even {
+      font-size: 11px; color: var(--light-text);
+      background: rgba(212,175,55,0.1); padding: 7px 10px; border-radius: 8px; margin-top: 8px;
+    }
+    .details-title {
+      font-size: 13px; font-weight: bold; color: var(--dark);
+      margin-bottom: 8px; padding-bottom: 6px; border-bottom: 2px solid var(--border);
+    }
+    .row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+    }
+    .row:last-child { border-bottom: none; }
+    .row span:first-child { color: var(--light-text); }
+    .row span:last-child { font-weight: bold; color: var(--text); }
+    .row.total {
+      background: rgba(39,174,96,0.08); border-radius: 10px;
+      padding: 12px; margin-top: 8px; font-size: 14px;
+    }
+    .row.total span:last-child { color: var(--success); font-size: 16px; }
+    .stats-card {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 16px; padding: 14px; color: white; margin-bottom: 14px;
+    }
+    .stats-title { font-size: 13px; font-weight: bold; margin-bottom: 10px; opacity: 0.9; }
+    .stat-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 5px 0; font-size: 13px;
+    }
+    .stat-val { color: #FFD700; font-weight: bold; font-size: 16px; }
+    .footer { text-align: center; color: rgba(255,255,255,0.35); font-size: 11px; padding: 14px; }
+    .pulse { animation: pulse 0.5s ease; }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+  </style>
+</head>
+<body>
+
+<header class="app-header">
+  <h1>ماشین حساب طلا</h1>
+  <p>اهواز گلدن — محاسبه قیمت نهایی طلا</p>
+</header>
+
+<div class="content">
+
+  <div class="card">
+    <div class="card-head">وارد کردن اطلاعات طلا</div>
+    <div class="card-body">
+      <div class="input-group" id="grp-price">
+        <label>قیمت هر گرم طلا (تومان)</label>
+        <input id="price" type="tel" inputmode="decimal" placeholder="مثلاً: 3,450,000">
+        <span class="input-error" id="priceError"></span>
+      </div>
+      <div class="input-group" id="grp-weight">
+        <label>وزن طلا (گرم)</label>
+        <input id="weight" type="text" inputmode="decimal" placeholder="مثلاً: 5.25">
+        <span class="input-error" id="weightError"></span>
+      </div>
+      <div class="input-group" id="grp-making">
+        <label>اجرت ساخت (درصد %)</label>
+        <input id="makingFee" type="text" inputmode="decimal" placeholder="بین 0 تا 50">
+        <span class="input-error" id="makingFeeError"></span>
+      </div>
+      <div class="input-group" id="grp-profit">
+        <label>سود فروشنده (درصد %)</label>
+        <input id="sellerProfit" type="text" inputmode="decimal" placeholder="7">
+        <span class="input-error" id="sellerProfitError"></span>
+      </div>
+      <div class="input-group" id="grp-tax">
+        <label>مالیات بر ارزش افزوده (درصد %)</label>
+        <input id="tax" type="tel" inputmode="decimal" placeholder="9">
+        <span class="input-error" id="taxError"></span>
+      </div>
+      <div class="error-box" id="errorState"></div>
+      <div class="loading" id="loadingState">
+        <div class="spinner"></div>
+        <p>در حال محاسبه...</p>
+      </div>
+      <div class="buttons">
+        <button class="btn-calc" id="calculateBtn" onclick="calculate()">محاسبه قیمت</button>
+        <button class="btn-reset" onclick="resetForm()">بازنشانی</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="resultCard" style="display:none">
+    <div class="result-head">نتایج محاسبه</div>
+    <div class="result-body">
+      <div class="price-box">
+        <div class="price-label">قیمت نهایی طلا</div>
+        <div class="price-value" id="finalPrice">—</div>
+        <div class="break-even" id="breakEven"></div>
+      </div>
+      <div class="details-title">جزئیات محاسبه</div>
+      <div class="row"><span>قیمت خام طلا:</span><span id="metalValue">—</span></div>
+      <div class="row"><span>اجرت ساخت:</span><span id="makingFeeValue">—</span></div>
+      <div class="row"><span>جمع طلا + اجرت:</span><span id="subtotal1">—</span></div>
+      <div class="row"><span>سود فروشنده:</span><span id="profitValue">—</span></div>
+      <div class="row"><span>مالیات:</span><span id="taxValue">—</span></div>
+      <div class="row total"><span>قیمت کل:</span><span id="totalPrice">—</span></div>
+    </div>
+  </div>
+
+  <div class="stats-card">
+    <div class="stats-title">آمار محاسبات شما</div>
+    <div class="stat-row">
+      <span>تعداد محاسبات:</span>
+      <span class="stat-val" id="calcCount">0</span>
+    </div>
+  </div>
+
+  <div class="footer">2025 Ahwaz Golden - تمامی حقوق محفوظ است</div>
+</div>
+
+<script>
+function parseNum(s) {
+  if (!s) return 0;
+  var c = String(s).replace(/[^\d.\u0660-\u0669\u06F0-\u06F9]/g,'')
+    .replace(/[\u06F0-\u06F9]/g,function(d){return String.fromCharCode(d.charCodeAt(0)-1728);})
+    .replace(/[\u0660-\u0669]/g,function(d){return String.fromCharCode(d.charCodeAt(0)-1584);});
+  var n = parseFloat(c); return isNaN(n)?0:n;
+}
+function fmt(n) {
+  if (typeof n!=='number'||!isFinite(n)) return '0';
+  try { return new Intl.NumberFormat('fa-IR').format(Math.round(n)); }
+  catch(e) { return Math.round(n).toLocaleString(); }
+}
+function toP(n) {
+  var p=['0','1','2','3','4','5','6','7','8','9'];
+  try { p=['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹']; } catch(e){}
+  return String(n).replace(/\d/g,function(d){return p[parseInt(d)];});
+}
+var cnt = parseInt(localStorage.getItem('ahwaz_cnt')||'0');
+document.getElementById('calcCount').textContent = cnt;
+
+function clearErr() {
+  document.querySelectorAll('.input-error').forEach(function(e){e.textContent='';e.style.display='none';});
+  document.querySelectorAll('.input-group').forEach(function(g){g.classList.remove('error','success');});
+  document.getElementById('errorState').style.display='none';
+}
+function showErr(id,msg) {
+  var el=document.getElementById(id);
+  if(el){el.textContent=msg;el.style.display='block';}
+  var grp=el?el.parentElement:null;
+  if(grp) grp.classList.add('error');
+}
+function validate() {
+  clearErr();
+  var ok=true;
+  var price=parseNum(document.getElementById('price').value);
+  var weight=parseNum(document.getElementById('weight').value);
+  var making=parseNum(document.getElementById('makingFee').value);
+  var profit=parseNum(document.getElementById('sellerProfit').value);
+  var tax=parseNum(document.getElementById('tax').value);
+  if(price<=0){showErr('priceError','قیمت معتبر وارد کنید');ok=false;}
+  else if(price>100000000){showErr('priceError','قیمت بسیار بالاست');ok=false;}
+  if(weight<=0){showErr('weightError','وزن معتبر وارد کنید');ok=false;}
+  else if(weight>10000){showErr('weightError','وزن بسیار بالاست');ok=false;}
+  if(making<0||making>100){showErr('makingFeeError','اجرت باید بین 0 تا 100 باشد');ok=false;}
+  if(profit<0||profit>100){showErr('sellerProfitError','سود باید بین 0 تا 100 باشد');ok=false;}
+  if(tax<0||tax>100){showErr('taxError','مالیات باید بین 0 تا 100 باشد');ok=false;}
+  return ok;
+}
+function calculate() {
+  clearErr();
+  if(!validate()){
+    var eb=document.getElementById('errorState');
+    eb.textContent='لطفاً مقادیر را اصلاح کنید';
+    eb.style.display='block';
+    return;
+  }
+  var ld=document.getElementById('loadingState');
+  var btn=document.getElementById('calculateBtn');
+  ld.style.display='block'; btn.disabled=true;
+  setTimeout(function(){
+    var price=parseNum(document.getElementById('price').value);
+    var weight=parseNum(document.getElementById('weight').value);
+    var making=parseNum(document.getElementById('makingFee').value)||0;
+    var profit=parseNum(document.getElementById('sellerProfit').value)||0;
+    var tax=parseNum(document.getElementById('tax').value)||0;
+    var metalVal=price*weight;
+    var makingVal=(price*making/100)*weight;
+    var sub1=metalVal+makingVal;
+    var profitVal=sub1*profit/100;
+    var taxable=makingVal+profitVal;
+    var taxVal=taxable*tax/100;
+    var total=sub1+profitVal+taxVal;
+    var breakEven=total/weight;
+    document.getElementById('metalValue').textContent=fmt(metalVal)+' تومان';
+    document.getElementById('makingFeeValue').textContent=fmt(makingVal)+' تومان';
+    document.getElementById('subtotal1').textContent=fmt(sub1)+' تومان';
+    document.getElementById('profitValue').textContent=fmt(profitVal)+' تومان';
+    document.getElementById('taxValue').textContent=fmt(taxVal)+' تومان';
+    document.getElementById('totalPrice').textContent=fmt(total)+' تومان';
+    var fp=document.getElementById('finalPrice');
+    fp.textContent=fmt(total)+' تومان';
+    fp.classList.add('pulse');
+    setTimeout(function(){fp.classList.remove('pulse');},600);
+    document.getElementById('breakEven').textContent='نقطه سربه‌سر هر گرم: '+fmt(breakEven)+' تومان';
+    var rc=document.getElementById('resultCard');
+    rc.style.display='block';
+    rc.scrollIntoView({behavior:'smooth',block:'nearest'});
+    cnt++;
+    localStorage.setItem('ahwaz_cnt',cnt);
+    document.getElementById('calcCount').textContent=toP(cnt);
+    ['price','weight','makingFee','sellerProfit','tax'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el&&el.value.trim()) el.parentElement.classList.add('success');
+    });
+    ld.style.display='none'; btn.disabled=false;
+  }, 400);
+}
+function resetForm() {
+  ['price','weight','makingFee','sellerProfit','tax'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+  clearErr();
+  document.getElementById('resultCard').style.display='none';
+  document.getElementById('price').focus();
+}
+document.addEventListener('keydown',function(e){if(e.key==='Enter') calculate();});
+</script>
+</body>
+</html>
