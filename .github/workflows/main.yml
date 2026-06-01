@@ -1,10 +1,8 @@
 name: Build APK
-
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,12 +12,38 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: '8.1.1'
+      - name: Fix project structure
+        run: |
+          mkdir -p app/src/main/java/com/ahwazgolden/calculator
+          mkdir -p app/src/main/res/layout
+          mkdir -p app/src/main/res/values
+          mkdir -p app/src/main/res/mipmap-hdpi
+          mkdir -p app/src/main/assets
+          mkdir -p gradle/wrapper
+          cp AndroidManifest.xml app/src/main/AndroidManifest.xml
+          cp MainActivity.java app/src/main/java/com/ahwazgolden/calculator/
+          cp activity_main.xml app/src/main/res/layout/
+          cp strings.xml app/src/main/res/values/
+          cp styles.xml app/src/main/res/values/
+          cp calculator.html app/src/main/assets/
+          cp ic_launcher.png app/src/main/res/mipmap-hdpi/
+          cp ic_launcher_round.png app/src/main/res/mipmap-hdpi/
+          cp gradle-wrapper.properties gradle/wrapper/
+          mv build.gradle app/build.gradle || true
+          chmod +x gradlew
+      - name: Create root build.gradle
+        run: |
+          cat > build.gradle << 'EOF'
+          buildscript {
+              repositories { google(); mavenCentral() }
+              dependencies { classpath 'com.android.tools.build:gradle:8.1.0' }
+          }
+          allprojects {
+              repositories { google(); mavenCentral() }
+          }
+          EOF
       - name: Build APK
-        run: ./gradlew assembleDebug
-        working-directory: ${{ github.workspace }}
+        run: ./gradlew assembleDebug --stacktrace
       - uses: actions/upload-artifact@v4
         with:
           name: AhwazGolden-Calculator
