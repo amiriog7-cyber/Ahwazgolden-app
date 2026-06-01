@@ -31,6 +31,32 @@ jobs:
           cp gradle-wrapper.properties gradle/wrapper/
           mv build.gradle app/build.gradle || true
           chmod +x gradlew
+          cat > app/build.gradle << 'EOF'
+          plugins {
+              id 'com.android.application'
+          }
+          android {
+              namespace 'com.ahwazgolden.calculator'
+              compileSdk 34
+              defaultConfig {
+                  applicationId "com.ahwazgolden.calculator"
+                  minSdk 21
+                  targetSdk 34
+                  versionCode 1
+                  versionName "1.0"
+              }
+              buildTypes {
+                  release { minifyEnabled false }
+              }
+              compileOptions {
+                  sourceCompatibility JavaVersion.VERSION_1_8
+                  targetCompatibility JavaVersion.VERSION_1_8
+              }
+          }
+          dependencies {
+              implementation 'androidx.appcompat:appcompat:1.6.1'
+          }
+          EOF
       - name: Create root build.gradle
         run: |
           cat > build.gradle << 'EOF'
