@@ -26,8 +26,6 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
     body { font-family: 'Vazirmatn', Tahoma, sans-serif; direction: rtl; background: var(--body-bg); min-height: 100vh; color: var(--text); }
-
-    /* لاگین */
     #auth-screen { display: flex; flex-direction: column; min-height: 100vh; background: linear-gradient(135deg, #1a1a2e 0%, #2d3561 50%, #0f3460 100%); }
     .auth-header { text-align: center; padding: 40px 20px 20px; }
     .auth-logo { width: 72px; height: 72px; background: linear-gradient(135deg, var(--gold), #c9a236); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 36px; margin: 0 auto 16px; box-shadow: 0 8px 24px rgba(212,175,55,0.4); }
@@ -39,8 +37,7 @@
     .auth-tab { flex: 1; text-align: center; padding: 10px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; color: var(--light-text); transition: all 0.2s; border: none; background: none; font-family: 'Vazirmatn', Tahoma, sans-serif; }
     .auth-tab.active { background: white; color: var(--dark); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     [data-theme="dark"] .auth-tab.active { background: #252f42; color: var(--text); }
-    .auth-form { display: none; }
-    .auth-form.active { display: block; }
+    .auth-form { display: none; } .auth-form.active { display: block; }
     .auth-field { margin-bottom: 16px; }
     .auth-field label { display: block; font-size: 13px; font-weight: 600; color: var(--label); margin-bottom: 6px; }
     .auth-field input { width: 100%; padding: 13px 14px; border: 2px solid var(--input-border); border-radius: 12px; font-size: 16px; font-family: 'Vazirmatn', Tahoma, sans-serif; background: var(--input-bg); color: var(--text); -webkit-appearance: none; }
@@ -51,8 +48,6 @@
     .auth-msg.error { background: rgba(229,62,62,0.1); color: var(--error); border: 1px solid var(--error); }
     .auth-msg.success { background: rgba(56,161,105,0.1); color: var(--success); border: 1px solid var(--success); }
     .auth-loading { text-align: center; padding: 10px; color: var(--light-text); font-size: 13px; display: none; }
-
-    /* هدر */
     #main-screen { display: none; }
     .header { background: var(--header-bg); padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.3); }
     .header-top { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px 8px; border-bottom: 1px solid rgba(255,255,255,0.08); }
@@ -69,8 +64,6 @@
     .datetime-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px 12px; }
     .date-display { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.75); font-size: 13px; font-weight: 500; }
     .time-display { background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; padding: 4px 14px; color: var(--gold2); font-size: 15px; font-weight: 700; letter-spacing: 1px; }
-
-    /* محتوا */
     .content { padding: 16px; max-width: 500px; margin: 0 auto; }
     .card { background: var(--card); border-radius: 20px; overflow: hidden; box-shadow: var(--card-shadow); margin-bottom: 16px; border: 1px solid rgba(0,0,0,0.04); }
     .card-head { background: linear-gradient(135deg, var(--card-head), #34495e); color: white; text-align: center; padding: 14px 16px; font-size: 15px; font-weight: 700; border-bottom: 3px solid var(--gold); display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -111,7 +104,7 @@
     .row.tot span:last-child { color: var(--success); font-size: 19px; }
     .sc { background: var(--stats-bg); border-radius: 16px; padding: 16px; color: white; margin-bottom: 16px; }
     .st { font-size: 13px; font-weight: 700; margin-bottom: 10px; opacity: 0.9; }
-    .sr { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+    .sr { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 6px; }
     .sv { color: #FFD700; font-weight: 800; font-size: 20px; font-family: 'Vazirmatn', Tahoma, sans-serif; }
     .footer { text-align: center; color: var(--light-text); font-size: 11px; padding: 16px; opacity: 0.6; }
     .pulse { animation: pulse .5s ease; }
@@ -137,29 +130,14 @@
     <div class="auth-msg" id="auth-msg"></div>
     <div class="auth-loading" id="auth-loading">⏳ در حال پردازش...</div>
     <div class="auth-form active" id="form-login">
-      <div class="auth-field">
-        <label>نام کاربری</label>
-        <input type="text" id="login-username" placeholder="نام کاربری خود را وارد کنید" autocomplete="off">
-      </div>
-      <div class="auth-field">
-        <label>رمز عبور</label>
-        <input type="password" id="login-password" placeholder="رمز عبور خود را وارد کنید">
-      </div>
+      <div class="auth-field"><label>نام کاربری</label><input type="text" id="login-username" placeholder="نام کاربری خود را وارد کنید" autocomplete="off"></div>
+      <div class="auth-field"><label>رمز عبور</label><input type="password" id="login-password" placeholder="رمز عبور خود را وارد کنید"></div>
       <button class="auth-btn" onclick="doLogin()">ورود به حساب</button>
     </div>
     <div class="auth-form" id="form-register">
-      <div class="auth-field">
-        <label>نام کاربری</label>
-        <input type="text" id="reg-username" placeholder="نام کاربری دلخواه" autocomplete="off">
-      </div>
-      <div class="auth-field">
-        <label>ایمیل</label>
-        <input type="email" id="reg-email" placeholder="ایمیل خود را وارد کنید">
-      </div>
-      <div class="auth-field">
-        <label>رمز عبور (حداقل ۶ کاراکتر)</label>
-        <input type="password" id="reg-password" placeholder="رمز عبور دلخواه">
-      </div>
+      <div class="auth-field"><label>نام کاربری</label><input type="text" id="reg-username" placeholder="نام کاربری دلخواه" autocomplete="off"></div>
+      <div class="auth-field"><label>ایمیل</label><input type="email" id="reg-email" placeholder="ایمیل خود را وارد کنید"></div>
+      <div class="auth-field"><label>رمز عبور (حداقل ۶ کاراکتر)</label><input type="password" id="reg-password" placeholder="رمز عبور دلخواه"></div>
       <button class="auth-btn" onclick="doRegister()">ثبت نام</button>
     </div>
   </div>
@@ -171,7 +149,7 @@
     <div class="header-top">
       <div class="app-title">
         <div class="gold-icon">🥇</div>
-        <div><h1>ماشین حساب طلا</h1><p>اهواز گلدن</p></div>
+        <div><h1>ماشین حساب طلا</h1><p>Ahwaz Golden</p></div>
       </div>
       <div class="header-actions">
         <div class="user-badge">👤 <span id="username-display"></span></div>
@@ -218,8 +196,10 @@
     </div>
 
     <div class="sc">
-      <div class="st">📊 آمار محاسبات شما</div>
-      <div class="sr"><span>تعداد محاسبات انجام شده:</span><span class="sv" id="cc">۰</span></div>
+      <div class="st">📊 آمار محاسبات</div>
+      <div class="sr"><span>کل محاسبات سرور:</span><span class="sv" id="server-total">—</span></div>
+      <div class="sr"><span>محاسبات امروز:</span><span class="sv" id="server-today">—</span></div>
+      <div class="sr"><span>محاسبات من (این دستگاه):</span><span class="sv" id="cc">۰</span></div>
     </div>
     <div class="footer">© ۱۴۰۴ اهواز گلدن — تمامی حقوق محفوظ است</div>
   </div>
@@ -227,6 +207,7 @@
 
 <script>
 var API_BASE = 'https://ahwazgolden.ir/app-api';
+var SITE_BASE = 'https://ahwazgolden.ir';
 
 // ===== تم =====
 var theme = localStorage.getItem('theme') || 'light';
@@ -324,7 +305,7 @@ var cnt=parseInt(localStorage.getItem('ac')||'0');
 var ccEl=document.getElementById('cc');
 if(ccEl)ccEl.textContent=toFa(cnt);
 
-// ===== تابع درخواست به سرور با XMLHttpRequest =====
+// ===== درخواست HTTP =====
 function httpPost(url, data, onSuccess, onError) {
   var xhr = new XMLHttpRequest();
   xhr.open('POST', url, true);
@@ -333,20 +314,51 @@ function httpPost(url, data, onSuccess, onError) {
   xhr.onreadystatechange = function() {
     if(xhr.readyState === 4) {
       if(xhr.status === 200) {
-        try {
-          var result = JSON.parse(xhr.responseText);
-          onSuccess(result);
-        } catch(e) {
-          onError('خطا در پردازش پاسخ: ' + xhr.responseText.substring(0,80));
-        }
+        try { onSuccess(JSON.parse(xhr.responseText)); }
+        catch(e) { if(onError) onError('خطا در پردازش پاسخ'); }
       } else {
-        onError('خطای سرور: ' + xhr.status);
+        if(onError) onError('خطای سرور: ' + xhr.status);
       }
     }
   };
-  xhr.ontimeout = function() { onError('زمان اتصال تمام شد'); };
-  xhr.onerror = function() { onError('خطا در اتصال به اینترنت'); };
+  xhr.ontimeout = function() { if(onError) onError('زمان اتصال تمام شد'); };
+  xhr.onerror = function() { if(onError) onError('خطا در اتصال به اینترنت'); };
   xhr.send(JSON.stringify(data));
+}
+
+function httpGet(url, onSuccess) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.timeout = 8000;
+  xhr.onreadystatechange = function() {
+    if(xhr.readyState === 4 && xhr.status === 200) {
+      try { onSuccess(JSON.parse(xhr.responseText)); } catch(e) {}
+    }
+  };
+  xhr.ontimeout = function(){};
+  xhr.onerror = function(){};
+  xhr.send();
+}
+
+// ===== آمار سرور =====
+function loadServerStats() {
+  httpGet(SITE_BASE + '/server-counter.php', function(data) {
+    if(data.success) {
+      var st = document.getElementById('server-total');
+      var sd = document.getElementById('server-today');
+      if(st) st.textContent = toFa(data.total_count || 0);
+      if(sd) sd.textContent = toFa(data.today_count || 0);
+    }
+  });
+}
+
+// ===== ارسال آمار به سرور =====
+function sendStatsToServer(calcData) {
+  // افزایش شمارنده کل
+  httpPost(SITE_BASE + '/server-counter.php', {}, function(){}, function(){});
+
+  // ذخیره جزئیات محاسبه
+  httpPost(SITE_BASE + '/save_calculation.php', calcData, function(){}, function(){});
 }
 
 // ===== لاگین / ثبت نام =====
@@ -362,35 +374,25 @@ function switchTab(tab){
   }
   hideAuthMsg();
 }
-function showAuthMsg(msg,type){
-  var el=document.getElementById('auth-msg');
-  el.textContent=msg; el.className='auth-msg '+type; el.style.display='block';
-}
-function hideAuthMsg(){ document.getElementById('auth-msg').style.display='none'; }
-function setAuthLoading(show){ document.getElementById('auth-loading').style.display=show?'block':'none'; }
+function showAuthMsg(msg,type){var el=document.getElementById('auth-msg');el.textContent=msg;el.className='auth-msg '+type;el.style.display='block';}
+function hideAuthMsg(){document.getElementById('auth-msg').style.display='none';}
+function setAuthLoading(show){document.getElementById('auth-loading').style.display=show?'block':'none';}
 
 function doLogin(){
   var username=document.getElementById('login-username').value.trim();
   var password=document.getElementById('login-password').value;
   if(!username||!password){showAuthMsg('لطفاً همه فیلدها را پر کنید','error');return;}
   setAuthLoading(true); hideAuthMsg();
-  httpPost(
-    API_BASE+'/app-login.php',
-    {username:username, password:password},
+  httpPost(API_BASE+'/app-login.php',{username:username,password:password},
     function(data){
       setAuthLoading(false);
       if(data.success){
-        localStorage.setItem('app_token', data.token);
-        localStorage.setItem('app_username', data.username);
+        localStorage.setItem('app_token',data.token);
+        localStorage.setItem('app_username',data.username);
         showMainScreen(data.username);
-      } else {
-        showAuthMsg(data.message, 'error');
-      }
+      } else { showAuthMsg(data.message,'error'); }
     },
-    function(err){
-      setAuthLoading(false);
-      showAuthMsg(err, 'error');
-    }
+    function(err){ setAuthLoading(false); showAuthMsg(err,'error'); }
   );
 }
 
@@ -400,23 +402,16 @@ function doRegister(){
   var password=document.getElementById('reg-password').value;
   if(!username||!email||!password){showAuthMsg('لطفاً همه فیلدها را پر کنید','error');return;}
   setAuthLoading(true); hideAuthMsg();
-  httpPost(
-    API_BASE+'/app-register.php',
-    {username:username, email:email, password:password},
+  httpPost(API_BASE+'/app-register.php',{username:username,email:email,password:password},
     function(data){
       setAuthLoading(false);
       if(data.success){
         showAuthMsg('ثبت نام موفق! اکنون وارد شوید','success');
         switchTab('login');
         document.getElementById('login-username').value=username;
-      } else {
-        showAuthMsg(data.message,'error');
-      }
+      } else { showAuthMsg(data.message,'error'); }
     },
-    function(err){
-      setAuthLoading(false);
-      showAuthMsg(err,'error');
-    }
+    function(err){ setAuthLoading(false); showAuthMsg(err,'error'); }
   );
 }
 
@@ -432,18 +427,14 @@ function showMainScreen(username){
   document.getElementById('main-screen').style.display='block';
   document.getElementById('username-display').textContent=username;
   updateDate(); updateClock();
+  loadServerStats();
 }
 
 function checkSavedToken(){
   var token=localStorage.getItem('app_token');
-  var username=localStorage.getItem('app_username');
   if(!token){return;}
-  httpPost(
-    API_BASE+'/app-verify.php',
-    {token:token},
-    function(data){
-      if(data.success){ showMainScreen(data.username); }
-    },
+  httpPost(API_BASE+'/app-verify.php',{token:token},
+    function(data){ if(data.success){ showMainScreen(data.username); } },
     function(){}
   );
 }
@@ -474,6 +465,7 @@ function validate(){
   if(tx<0||tx>100){se('e5','g5','بین ۰ تا ۱۰۰ درصد');ok=false;}
   return ok;
 }
+
 function calc(){
   clr();
   if(!validate()){var eb=document.getElementById('eb');eb.textContent='لطفاً مقادیر را اصلاح کنید';eb.style.display='block';return;}
@@ -486,6 +478,7 @@ function calc(){
     var pf=parseNum(document.getElementById('profit').value)||0;
     var tx=parseNum(document.getElementById('tax').value)||0;
     var mv=pr*w,mfv=(pr*mk/100)*w,s1=mv+mfv,pv=s1*pf/100,txv=(mfv+pv)*tx/100,tot=s1+pv+txv,be=tot/w;
+
     document.getElementById('mv').textContent=fmt(mv)+' تومان';
     document.getElementById('mfv').textContent=fmt(mfv)+' تومان';
     document.getElementById('s1').textContent=fmt(s1)+' تومان';
@@ -499,8 +492,31 @@ function calc(){
     document.getElementById('be').textContent='نقطه سربه‌سر هر گرم: '+fmt(be)+' تومان';
     var rc=document.getElementById('rc');rc.style.display='block';
     rc.scrollIntoView({behavior:'smooth',block:'nearest'});
+
+    // آمار محلی
     cnt++;localStorage.setItem('ac',cnt);
     document.getElementById('cc').textContent=toFa(cnt);
+
+    // ارسال به سرور
+    sendStatsToServer({
+      pricePerGram: pr,
+      weight: w,
+      makingFeePercent: mk,
+      sellerProfitPercent: pf,
+      taxPercent: tx,
+      metalValue: mv,
+      makingFeeValue: mfv,
+      profitValue: pv,
+      taxValue: txv,
+      totalPrice: tot,
+      breakEvenPerGram: be,
+      username: localStorage.getItem('app_username') || 'unknown',
+      source: 'android_app'
+    });
+
+    // آپدیت آمار سرور
+    setTimeout(function(){ loadServerStats(); }, 1500);
+
     ['g1','g2','g3','g4','g5'].forEach(function(i){
       var el=document.getElementById(i).querySelector('input');
       if(el&&el.value.trim())document.getElementById(i).className='ig ok';
@@ -508,6 +524,7 @@ function calc(){
     ld.style.display='none';cb.disabled=false;
   },400);
 }
+
 function reset(){
   ['price','weight','making','profit','tax'].forEach(function(i){document.getElementById(i).value='';});
   clr();document.getElementById('rc').style.display='none';
