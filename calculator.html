@@ -533,8 +533,19 @@ function parseNum(s) {
 
 function fmt(n) {
   if(typeof n!=='number'||!isFinite(n)) return '۰';
-  try { return new Intl.NumberFormat('fa-IR').format(Math.round(n)); }
-  catch(e) { return toFa(Math.round(n).toLocaleString()); }
+  try {
+    return new Intl.NumberFormat('fa-IR', {
+      useGrouping: true,
+      maximumFractionDigits: 0
+    }).format(Math.round(n))
+    .replace(/[\u06F0-\u06F9]/g, function(d){
+      return String.fromCharCode(d.charCodeAt(0)-1728);
+    })
+    .replace(/\d/g, function(d){ return '۰۱۲۳۴۵۶۷۸۹'[parseInt(d)]; });
+  } catch(e) {
+    var s = Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '٬');
+    return toFa(s);
+  }
 }
 
 // فرمت هنگام blur
