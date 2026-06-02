@@ -540,11 +540,22 @@ function fmt(n) {
 // فرمت هنگام blur
 ['price','weight','making','profit','tax'].forEach(function(id) {
   var el = document.getElementById(id);
-  el.addEventListener('blur', function(){
-    var n = parseNum(this.value);
-    if(n > 0) this.value = new Intl.NumberFormat('fa-IR').format(n);
+  el.addEventListener('input', function(){
+    var pos = this.selectionStart;
+    var raw = String(this.value)
+      .replace(/[\u06F0-\u06F9]/g, function(d){ return String.fromCharCode(d.charCodeAt(0)-1728); })
+      .replace(/[\u0660-\u0669]/g, function(d){ return String.fromCharCode(d.charCodeAt(0)-1584); })
+      .replace(/[^\d.]/g,'');
+    var parts = raw.split('.');
+    var intPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    var formatted = parts.length > 1 ? intPart + '.' + parts[1] : intPart;
+    // تبدیل به فارسی
+    formatted = formatted
+      .replace(/\d/g, function(d){ return '۰۱۲۳۴۵۶۷۸۹'[parseInt(d)]; })
+      .replace(/,/g, '٬');
+    this.value = formatted;
   });
-  el.addEventListener('focus', function(){
+  el.addEventListener('blur', function(){
     var n = parseNum(this.value);
     if(n > 0) this.value = new Intl.NumberFormat('fa-IR').format(n);
   });
