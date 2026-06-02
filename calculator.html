@@ -111,6 +111,21 @@
     @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
     .fade-in { animation: fadeIn 0.4s ease; }
     @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+    /* کارت قیمت‌های لحظه‌ای */
+    .price-card { background: linear-gradient(135deg, #1a1a2e, #2d3561); border-radius: 16px; padding: 14px; margin-bottom: 16px; border: 1px solid rgba(212,175,55,0.2); }
+    .price-card-title { color: var(--gold); font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .price-refresh-btn { background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; padding: 4px 10px; color: var(--gold); font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'Vazirmatn', Tahoma, sans-serif; }
+    .price-items { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+    .price-item { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 10px; text-align: center; }
+    .price-item-name { color: rgba(255,255,255,0.6); font-size: 11px; margin-bottom: 4px; }
+    .price-item-value { color: white; font-size: 14px; font-weight: 700; font-family: 'Vazirmatn', Tahoma, sans-serif; }
+    .price-item-change { font-size: 10px; margin-top: 2px; }
+    .price-item-change.up { color: #68d391; }
+    .price-item-change.down { color: #fc8181; }
+    .price-load-btn { width: 100%; padding: 10px; background: linear-gradient(135deg, var(--gold), #c9a236); color: #1a1a2e; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Vazirmatn', Tahoma, sans-serif; }
+    .price-loading { color: rgba(255,255,255,0.5); font-size: 12px; text-align: center; padding: 8px; }
+    .price-update-time { color: rgba(255,255,255,0.4); font-size: 10px; text-align: center; margin-top: 6px; }
   </style>
 </head>
 <body>
@@ -164,6 +179,25 @@
   </div>
 
   <div class="content">
+
+    <!-- کارت قیمت‌های لحظه‌ای -->
+    <div class="price-card">
+      <div class="price-card-title">
+        <span>📊 قیمت‌های لحظه‌ای</span>
+        <button class="price-refresh-btn" onclick="loadPrices()">🔄 بروزرسانی</button>
+      </div>
+      <div id="price-loading" class="price-loading">در حال دریافت قیمت‌ها...</div>
+      <div id="price-items" class="price-items" style="display:none">
+        <div class="price-item"><div class="price-item-name">💵 دلار</div><div class="price-item-value" id="p-usd">—</div><div class="price-item-change" id="c-usd"></div></div>
+        <div class="price-item"><div class="price-item-name">🥇 طلای ۱۸ عیار</div><div class="price-item-value" id="p-gold18">—</div><div class="price-item-change" id="c-gold18"></div></div>
+        <div class="price-item"><div class="price-item-name">🥇 طلای ۲۴ عیار</div><div class="price-item-value" id="p-gold24">—</div><div class="price-item-change" id="c-gold24"></div></div>
+        <div class="price-item"><div class="price-item-name">👑 سکه امامی</div><div class="price-item-value" id="p-emami">—</div><div class="price-item-change" id="c-emami"></div></div>
+      </div>
+      <div id="price-error" style="display:none;color:#fc8181;font-size:12px;text-align:center;padding:8px;">خطا در دریافت قیمت‌ها</div>
+      <button class="price-load-btn" id="load-price-btn" onclick="loadGoldToCalc()" style="display:none">⬇️ بارگذاری قیمت طلای ۱۸ عیار در ماشین حساب</button>
+      <div class="price-update-time" id="price-update-time"></div>
+    </div>
+
     <div class="card">
       <div class="card-head">💰 وارد کردن اطلاعات طلا</div>
       <div class="card-body">
@@ -201,13 +235,14 @@
       <div class="sr"><span>محاسبات امروز:</span><span class="sv" id="server-today">—</span></div>
       <div class="sr"><span>محاسبات من (این دستگاه):</span><span class="sv" id="cc">۰</span></div>
     </div>
-    <div class="footer">© ۱۴۰۴ اهواز گلدن — تمامی حقوق محفوظ است</div>
+    <div class="footer">© ۱۴۰۴ Ahwaz Golden — تمامی حقوق محفوظ است<p>v405</p></div>
   </div>
 </div>
 
 <script>
 var API_BASE = 'https://ahwazgolden.ir/app-api';
 var SITE_BASE = 'https://ahwazgolden.ir';
+var gold18Price = 0; // قیمت طلای ۱۸ عیار برای ماشین حساب
 
 // ===== تم =====
 var theme = localStorage.getItem('theme') || 'light';
@@ -340,6 +375,60 @@ function httpGet(url, onSuccess) {
   xhr.send();
 }
 
+// ===== دریافت قیمت‌های لحظه‌ای =====
+function loadPrices() {
+  document.getElementById('price-loading').style.display='block';
+  document.getElementById('price-items').style.display='none';
+  document.getElementById('price-error').style.display='none';
+  document.getElementById('load-price-btn').style.display='none';
+
+  httpGet(SITE_BASE + '/coin/get-prices.php', function(data) {
+    document.getElementById('price-loading').style.display='none';
+    if(!data.success) {
+      document.getElementById('price-error').style.display='block';
+      return;
+    }
+    var d = data.data;
+
+    // دلار
+    document.getElementById('p-usd').textContent = fmt(parseFloat(d.currency[0].price));
+    setChange('c-usd', d.currency[0].change);
+
+    // طلای ۱۸ عیار
+    gold18Price = parseFloat(d.gold[0].price);
+    document.getElementById('p-gold18').textContent = fmt(gold18Price);
+    setChange('c-gold18', d.gold[0].change);
+
+    // طلای ۲۴ عیار
+    document.getElementById('p-gold24').textContent = fmt(parseFloat(d.gold[1].price));
+    setChange('c-gold24', d.gold[1].change);
+
+    // سکه امامی
+    document.getElementById('p-emami').textContent = fmt(parseFloat(d.coin[0].price));
+    setChange('c-emami', d.coin[0].change);
+
+    document.getElementById('price-items').style.display='grid';
+    document.getElementById('load-price-btn').style.display='block';
+    document.getElementById('price-update-time').textContent = 'آخرین بروزرسانی: ' + (data.update_time || '');
+  });
+}
+
+function setChange(id, change) {
+  var el = document.getElementById(id);
+  var v = parseFloat(change) || 0;
+  if(v > 0) { el.textContent = '▲ ' + fmt(v); el.className = 'price-item-change up'; }
+  else if(v < 0) { el.textContent = '▼ ' + fmt(Math.abs(v)); el.className = 'price-item-change down'; }
+  else { el.textContent = ''; }
+}
+
+function loadGoldToCalc() {
+  if(gold18Price > 0) {
+    var formatted = toFa(Math.round(gold18Price).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'٬'));
+    document.getElementById('price').value = formatted;
+    document.getElementById('price').scrollIntoView({behavior:'smooth', block:'center'});
+  }
+}
+
 // ===== آمار سرور =====
 function loadServerStats() {
   httpGet(SITE_BASE + '/server-counter.php', function(data) {
@@ -428,6 +517,7 @@ function showMainScreen(username){
   document.getElementById('username-display').textContent=username;
   updateDate(); updateClock();
   loadServerStats();
+  loadPrices();
 }
 
 function checkSavedToken(){
