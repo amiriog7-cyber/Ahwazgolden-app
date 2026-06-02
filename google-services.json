@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "964525613111",
+    "project_id": "ahwazgolden",
+    "storage_bucket": "ahwazgolden.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964525613111:android:19ea04cf1a1dfd0e3edfb2",
+        "android_client_info": {
+          "package_name": "com.ahwazgolden.calculator"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBX1c30uVqCN3EJ0yQsFJX07830KIcg5rc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
