@@ -54,7 +54,135 @@
       color: var(--text);
     }
 
-    /* ===== هدر ===== */
+    /* ===== صفحه لاگین ===== */
+    #auth-screen {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1a2e 0%, #2d3561 50%, #0f3460 100%);
+    }
+
+    .auth-header {
+      text-align: center;
+      padding: 40px 20px 20px;
+    }
+
+    .auth-logo {
+      width: 72px; height: 72px;
+      background: linear-gradient(135deg, var(--gold), #c9a236);
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 16px;
+      box-shadow: 0 8px 24px rgba(212,175,55,0.4);
+    }
+
+    .auth-header h1 { color: var(--gold); font-size: 22px; font-weight: 800; }
+    .auth-header p { color: rgba(255,255,255,0.5); font-size: 13px; margin-top: 6px; }
+
+    .auth-card {
+      background: white;
+      border-radius: 24px 24px 0 0;
+      flex: 1;
+      padding: 24px 20px;
+      margin-top: 20px;
+    }
+
+    [data-theme="dark"] .auth-card { background: #1e2535; }
+
+    .auth-tabs {
+      display: flex;
+      background: var(--body-bg);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 24px;
+    }
+
+    .auth-tab {
+      flex: 1; text-align: center;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer;
+      color: var(--light-text);
+      transition: all 0.2s;
+      border: none; background: none;
+      font-family: 'Vazirmatn', Tahoma, sans-serif;
+    }
+
+    .auth-tab.active {
+      background: white;
+      color: var(--dark);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    [data-theme="dark"] .auth-tab.active { background: #252f42; color: var(--text); }
+
+    .auth-form { display: none; }
+    .auth-form.active { display: block; }
+
+    .auth-field { margin-bottom: 16px; }
+
+    .auth-field label {
+      display: block;
+      font-size: 13px; font-weight: 600;
+      color: var(--label);
+      margin-bottom: 6px;
+    }
+
+    .auth-field input {
+      width: 100%; padding: 13px 14px;
+      border: 2px solid var(--input-border);
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: 'Vazirmatn', Tahoma, sans-serif;
+      background: var(--input-bg);
+      color: var(--text);
+      -webkit-appearance: none;
+    }
+
+    .auth-field input:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.15);
+    }
+
+    .auth-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--gold), #c9a236);
+      color: #1a1a2e;
+      border: none; border-radius: 12px;
+      font-size: 16px; font-weight: 800;
+      cursor: pointer;
+      font-family: 'Vazirmatn', Tahoma, sans-serif;
+      box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+      margin-top: 8px;
+    }
+
+    .auth-btn:active { transform: scale(0.98); }
+
+    .auth-msg {
+      text-align: center;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    .auth-msg.error { background: rgba(229,62,62,0.1); color: var(--error); border: 1px solid var(--error); }
+    .auth-msg.success { background: rgba(56,161,105,0.1); color: var(--success); border: 1px solid var(--success); }
+
+    .auth-loading {
+      text-align: center; padding: 10px;
+      color: var(--light-text); font-size: 13px;
+      display: none;
+    }
+
+    /* ===== هدر اصلی ===== */
+    #main-screen { display: none; }
+
     .header {
       background: var(--header-bg);
       padding: 0;
@@ -70,11 +198,7 @@
       border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
-    .app-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .app-title { display: flex; align-items: center; gap: 8px; }
 
     .gold-icon {
       width: 36px; height: 36px;
@@ -85,14 +209,36 @@
       box-shadow: 0 2px 8px rgba(212,175,55,0.4);
     }
 
-    .app-title h1 { color: var(--gold); font-size: 17px; font-weight: 800; }
+    .app-title h1 { color: var(--gold); font-size: 16px; font-weight: 800; }
     .app-title p { color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 2px; }
 
-    /* دکمه روز/شب */
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+
+    .user-badge {
+      background: rgba(212,175,55,0.15);
+      border: 1px solid rgba(212,175,55,0.3);
+      border-radius: 20px;
+      padding: 4px 10px;
+      color: var(--gold2);
+      font-size: 12px; font-weight: 600;
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    .logout-btn {
+      background: rgba(229,62,62,0.15);
+      border: 1px solid rgba(229,62,62,0.3);
+      border-radius: 20px;
+      padding: 5px 10px;
+      color: #fc8181;
+      font-size: 12px; font-weight: 600;
+      cursor: pointer;
+      font-family: 'Vazirmatn', Tahoma, sans-serif;
+    }
+
     .theme-toggle {
       background: var(--toggle-bg);
       border: none; border-radius: 20px;
-      width: 52px; height: 28px;
+      width: 46px; height: 26px;
       cursor: pointer; position: relative;
       transition: all 0.3s; flex-shrink: 0;
     }
@@ -100,26 +246,18 @@
       content: '';
       position: absolute;
       top: 3px; right: 3px;
-      width: 22px; height: 22px;
+      width: 20px; height: 20px;
       background: var(--toggle-circle);
       border-radius: 50%;
       transition: all 0.3s;
     }
-    [data-theme="dark"] .theme-toggle::after { right: calc(100% - 25px); }
-    .theme-toggle .icon-sun, .theme-toggle .icon-moon {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      font-size: 13px; z-index: 1;
-    }
-    .theme-toggle .icon-sun { left: 6px; }
-    .theme-toggle .icon-moon { right: 6px; }
+    [data-theme="dark"] .theme-toggle::after { right: calc(100% - 23px); }
 
-    /* ساعت و تاریخ */
     .datetime-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 8px 16px 12px;
-      direction: rtl;
     }
 
     .date-display {
@@ -128,24 +266,18 @@
       font-size: 13px; font-weight: 500;
     }
 
-    .date-display .icon { font-size: 14px; opacity: 0.7; }
-
     .time-display {
       background: rgba(212,175,55,0.15);
       border: 1px solid rgba(212,175,55,0.3);
       border-radius: 20px;
       padding: 4px 14px;
       color: var(--gold2);
-      font-size: 16px;
-      font-weight: 700;
+      font-size: 15px; font-weight: 700;
       letter-spacing: 1px;
-      font-variant-numeric: tabular-nums;
     }
 
-    /* ===== محتوا ===== */
     .content { padding: 16px; max-width: 500px; margin: 0 auto; }
 
-    /* ===== کارت ===== */
     .card {
       background: var(--card);
       border-radius: 20px;
@@ -166,7 +298,6 @@
 
     .card-body { padding: 20px; }
 
-    /* ===== فیلدها ===== */
     .ig { margin-bottom: 14px; }
 
     label {
@@ -216,7 +347,6 @@
 
     .ie { color: var(--error); font-size: 12px; margin-top: 4px; display: none; padding-right: 4px; }
 
-    /* ===== دکمه‌ها ===== */
     .buttons { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-top: 18px; }
 
     button {
@@ -235,12 +365,7 @@
       box-shadow: 0 4px 15px rgba(212,175,55,0.35);
       display: flex; align-items: center; justify-content: center; gap: 6px;
     }
-    .bc:hover { box-shadow: 0 6px 20px rgba(212,175,55,0.5); }
-    .br {
-      background: var(--input-bg);
-      color: var(--light-text);
-      border: 2px solid var(--input-border);
-    }
+    .br { background: var(--input-bg); color: var(--light-text); border: 2px solid var(--input-border); }
 
     .ebox {
       background: rgba(229,62,62,0.08);
@@ -261,7 +386,6 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ===== نتایج ===== */
     .rhead {
       background: linear-gradient(135deg, var(--success), #276749);
       color: white; text-align: center;
@@ -276,22 +400,10 @@
       background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(212,175,55,0.03));
       border: 2px solid var(--gold);
       border-radius: 16px; padding: 18px; margin-bottom: 16px;
-      position: relative; overflow: hidden;
-    }
-    .pbox::before {
-      content: '✦';
-      position: absolute; top: -10px; left: -10px;
-      font-size: 40px; color: rgba(212,175,55,0.1);
     }
 
     .plbl { font-size: 12px; color: var(--light-text); margin-bottom: 8px; font-weight: 500; }
-
-    .pval {
-      font-size: 30px; font-weight: 800;
-      color: var(--success);
-      font-family: 'Vazirmatn', Tahoma, sans-serif;
-      line-height: 1.2;
-    }
+    .pval { font-size: 28px; font-weight: 800; color: var(--success); font-family: 'Vazirmatn', Tahoma, sans-serif; }
 
     .be {
       font-size: 12px; color: var(--light-text);
@@ -304,7 +416,6 @@
       font-size: 13px; font-weight: 700; color: var(--label);
       margin-bottom: 10px; padding-bottom: 8px;
       border-bottom: 2px solid var(--row-border);
-      display: flex; align-items: center; gap: 6px;
     }
 
     .row {
@@ -324,7 +435,6 @@
     .row.tot span:first-child { color: var(--text); font-weight: 600; }
     .row.tot span:last-child { color: var(--success); font-size: 19px; }
 
-    /* ===== آمار ===== */
     .sc {
       background: var(--stats-bg);
       border-radius: 16px; padding: 16px; color: white; margin-bottom: 16px;
@@ -337,137 +447,175 @@
 
     .pulse { animation: pulse .5s ease; }
     @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
-
-    /* انیمیشن ظاهر شدن */
     .fade-in { animation: fadeIn 0.4s ease; }
     @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
   </style>
 </head>
 <body>
 
-<!-- هدر -->
-<div class="header">
-  <div class="header-top">
-    <div class="app-title">
-      <div class="gold-icon">🥇</div>
-      <div>
-        <h1>ماشین حساب طلا</h1>
-        <p>اهواز گلدن</p>
-      </div>
-    </div>
-    <button class="theme-toggle" onclick="toggleTheme()" title="روز / شب">
-      <span class="icon-sun">☀️</span>
-      <span class="icon-moon">🌙</span>
-    </button>
+<!-- ===== صفحه لاگین ===== -->
+<div id="auth-screen">
+  <div class="auth-header">
+    <div class="auth-logo">🥇</div>
+    <h1>اهواز گلدن</h1>
+    <p>ماشین حساب طلا</p>
   </div>
-  <div class="datetime-bar">
-    <div class="date-display">
-      <span class="icon">📅</span>
-      <span id="jalali-date">در حال بارگذاری...</span>
+
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">ورود</button>
+      <button class="auth-tab" onclick="switchTab('register')">ثبت نام</button>
     </div>
-    <div class="time-display" id="clock">--:--:--</div>
+
+    <!-- پیام -->
+    <div class="auth-msg" id="auth-msg"></div>
+    <div class="auth-loading" id="auth-loading">⏳ در حال پردازش...</div>
+
+    <!-- فرم ورود -->
+    <div class="auth-form active" id="form-login">
+      <div class="auth-field">
+        <label>نام کاربری</label>
+        <input type="text" id="login-username" placeholder="نام کاربری خود را وارد کنید" autocomplete="off">
+      </div>
+      <div class="auth-field">
+        <label>رمز عبور</label>
+        <input type="password" id="login-password" placeholder="رمز عبور خود را وارد کنید">
+      </div>
+      <button class="auth-btn" onclick="doLogin()">ورود به حساب</button>
+    </div>
+
+    <!-- فرم ثبت نام -->
+    <div class="auth-form" id="form-register">
+      <div class="auth-field">
+        <label>نام کاربری</label>
+        <input type="text" id="reg-username" placeholder="نام کاربری دلخواه" autocomplete="off">
+      </div>
+      <div class="auth-field">
+        <label>ایمیل</label>
+        <input type="email" id="reg-email" placeholder="ایمیل خود را وارد کنید">
+      </div>
+      <div class="auth-field">
+        <label>رمز عبور (حداقل ۶ کاراکتر)</label>
+        <input type="password" id="reg-password" placeholder="رمز عبور دلخواه">
+      </div>
+      <button class="auth-btn" onclick="doRegister()">ثبت نام</button>
+    </div>
   </div>
 </div>
 
-<!-- محتوا -->
-<div class="content">
+<!-- ===== صفحه اصلی ===== -->
+<div id="main-screen">
 
-  <!-- فرم -->
-  <div class="card">
-    <div class="card-head">💰 وارد کردن اطلاعات طلا</div>
-    <div class="card-body">
-
-      <div class="ig" id="g1">
-        <label><span class="licon">₸</span> قیمت هر گرم طلا</label>
-        <div class="input-wrap">
-          <input id="price" type="tel" inputmode="decimal" placeholder="مثلاً: ۳٬۴۵۰٬۰۰۰">
-          <span class="unit-badge">تومان</span>
+  <div class="header">
+    <div class="header-top">
+      <div class="app-title">
+        <div class="gold-icon">🥇</div>
+        <div>
+          <h1>ماشین حساب طلا</h1>
+          <p>اهواز گلدن</p>
         </div>
-        <span class="ie" id="e1"></span>
       </div>
-
-      <div class="ig" id="g2">
-        <label><span class="licon">⚖</span> وزن طلا</label>
-        <div class="input-wrap">
-          <input id="weight" type="text" inputmode="decimal" placeholder="مثلاً: ۵٫۲۵">
-          <span class="unit-badge">گرم</span>
-        </div>
-        <span class="ie" id="e2"></span>
+      <div class="header-actions">
+        <div class="user-badge">👤 <span id="username-display"></span></div>
+        <button class="logout-btn" onclick="doLogout()">خروج</button>
+        <button class="theme-toggle" onclick="toggleTheme()"></button>
       </div>
-
-      <div class="ig" id="g3">
-        <label><span class="licon">🔨</span> اجرت ساخت</label>
-        <div class="input-wrap">
-          <input id="making" type="text" inputmode="decimal" placeholder="۰ تا ۵۰">
-          <span class="unit-badge">%</span>
-        </div>
-        <span class="ie" id="e3"></span>
-      </div>
-
-      <div class="ig" id="g4">
-        <label><span class="licon">📈</span> سود فروشنده</label>
-        <div class="input-wrap">
-          <input id="profit" type="text" inputmode="decimal" placeholder="۷">
-          <span class="unit-badge">%</span>
-        </div>
-        <span class="ie" id="e4"></span>
-      </div>
-
-      <div class="ig" id="g5">
-        <label><span class="licon">🏦</span> مالیات</label>
-        <div class="input-wrap">
-          <input id="tax" type="tel" inputmode="decimal" placeholder="۹">
-          <span class="unit-badge">%</span>
-        </div>
-        <span class="ie" id="e5"></span>
-      </div>
-
-      <div class="ebox" id="eb"></div>
-      <div class="loading" id="ld"><div class="spin"></div><p>در حال محاسبه...</p></div>
-
-      <div class="buttons">
-        <button class="bc" id="cb" onclick="calc()">⚡ محاسبه قیمت</button>
-        <button class="br" onclick="reset()">↺ پاک</button>
-      </div>
+    </div>
+    <div class="datetime-bar">
+      <div class="date-display">📅 <span id="jalali-date">...</span></div>
+      <div class="time-display" id="clock">--:--:--</div>
     </div>
   </div>
 
-  <!-- نتایج -->
-  <div class="card fade-in" id="rc" style="display:none">
-    <div class="rhead">✅ نتایج محاسبه</div>
-    <div class="rbody">
-      <div class="pbox">
-        <div class="plbl">قیمت نهایی طلا</div>
-        <div class="pval" id="fp">—</div>
-        <div class="be" id="be"></div>
+  <div class="content">
+    <div class="card">
+      <div class="card-head">💰 وارد کردن اطلاعات طلا</div>
+      <div class="card-body">
+        <div class="ig" id="g1">
+          <label><span class="licon">₸</span> قیمت هر گرم طلا</label>
+          <div class="input-wrap">
+            <input id="price" type="tel" inputmode="decimal" placeholder="مثلاً: ۳٬۴۵۰٬۰۰۰">
+            <span class="unit-badge">تومان</span>
+          </div>
+          <span class="ie" id="e1"></span>
+        </div>
+        <div class="ig" id="g2">
+          <label><span class="licon">⚖</span> وزن طلا</label>
+          <div class="input-wrap">
+            <input id="weight" type="text" inputmode="decimal" placeholder="مثلاً: ۵٫۲۵">
+            <span class="unit-badge">گرم</span>
+          </div>
+          <span class="ie" id="e2"></span>
+        </div>
+        <div class="ig" id="g3">
+          <label><span class="licon">🔨</span> اجرت ساخت</label>
+          <div class="input-wrap">
+            <input id="making" type="text" inputmode="decimal" placeholder="۰ تا ۵۰">
+            <span class="unit-badge">%</span>
+          </div>
+          <span class="ie" id="e3"></span>
+        </div>
+        <div class="ig" id="g4">
+          <label><span class="licon">📈</span> سود فروشنده</label>
+          <div class="input-wrap">
+            <input id="profit" type="text" inputmode="decimal" placeholder="۷">
+            <span class="unit-badge">%</span>
+          </div>
+          <span class="ie" id="e4"></span>
+        </div>
+        <div class="ig" id="g5">
+          <label><span class="licon">🏦</span> مالیات</label>
+          <div class="input-wrap">
+            <input id="tax" type="tel" inputmode="decimal" placeholder="۹">
+            <span class="unit-badge">%</span>
+          </div>
+          <span class="ie" id="e5"></span>
+        </div>
+        <div class="ebox" id="eb"></div>
+        <div class="loading" id="ld"><div class="spin"></div><p>در حال محاسبه...</p></div>
+        <div class="buttons">
+          <button class="bc" id="cb" onclick="calc()">⚡ محاسبه قیمت</button>
+          <button class="br" onclick="reset()">↺ پاک</button>
+        </div>
       </div>
-      <div class="dt">📋 جزئیات محاسبه</div>
-      <div class="row"><span>قیمت خام طلا:</span><span id="mv">—</span></div>
-      <div class="row"><span>اجرت ساخت:</span><span id="mfv">—</span></div>
-      <div class="row"><span>جمع طلا + اجرت:</span><span id="s1">—</span></div>
-      <div class="row"><span>سود فروشنده:</span><span id="pv">—</span></div>
-      <div class="row"><span>مالیات:</span><span id="tv">—</span></div>
-      <div class="row tot"><span>💰 قیمت کل نهایی:</span><span id="tp">—</span></div>
     </div>
-  </div>
 
-  <!-- آمار -->
-  <div class="sc">
-    <div class="st">📊 آمار محاسبات شما</div>
-    <div class="sr">
-      <span>تعداد محاسبات انجام شده:</span>
-      <span class="sv" id="cc">۰</span>
+    <div class="card fade-in" id="rc" style="display:none">
+      <div class="rhead">✅ نتایج محاسبه</div>
+      <div class="rbody">
+        <div class="pbox">
+          <div class="plbl">قیمت نهایی طلا</div>
+          <div class="pval" id="fp">—</div>
+          <div class="be" id="be"></div>
+        </div>
+        <div class="dt">📋 جزئیات محاسبه</div>
+        <div class="row"><span>قیمت خام طلا:</span><span id="mv">—</span></div>
+        <div class="row"><span>اجرت ساخت:</span><span id="mfv">—</span></div>
+        <div class="row"><span>جمع طلا + اجرت:</span><span id="s1">—</span></div>
+        <div class="row"><span>سود فروشنده:</span><span id="pv">—</span></div>
+        <div class="row"><span>مالیات:</span><span id="tv">—</span></div>
+        <div class="row tot"><span>💰 قیمت کل نهایی:</span><span id="tp">—</span></div>
+      </div>
     </div>
-  </div>
 
-  <div class="footer">© ۱۴۰۴ اهواز گلدن — تمامی حقوق محفوظ است</div>
+    <div class="sc">
+      <div class="st">📊 آمار محاسبات شما</div>
+      <div class="sr">
+        <span>تعداد محاسبات انجام شده:</span>
+        <span class="sv" id="cc">۰</span>
+      </div>
+    </div>
+
+    <div class="footer">© ۱۴۰۴ اهواز گلدن — تمامی حقوق محفوظ است</div>
+  </div>
 </div>
 
 <script>
-// ===== تم روز/شب =====
+var API_BASE = 'https://ahwazgolden.ir/app-api';
+
+// ===== تم =====
 var theme = localStorage.getItem('theme') || 'light';
 document.documentElement.setAttribute('data-theme', theme);
-
 function toggleTheme() {
   theme = theme === 'light' ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', theme);
@@ -480,132 +628,222 @@ function updateClock() {
   var h = String(now.getHours()).padStart(2,'0');
   var m = String(now.getMinutes()).padStart(2,'0');
   var s = String(now.getSeconds()).padStart(2,'0');
-  document.getElementById('clock').textContent = toFa(h+':'+m+':'+s);
+  var el = document.getElementById('clock');
+  if(el) el.textContent = toFa(h+':'+m+':'+s);
 }
 setInterval(updateClock, 1000);
 updateClock();
 
 // ===== تاریخ شمسی =====
-function toJalali(gy, gm, gd) {
-  var g_d_no, j_d_no, j_np, i;
-  var g_days_in_month = [31,28,31,30,31,30,31,31,30,31,30,31];
-  var j_days_in_month = [31,31,31,31,31,31,30,30,30,30,30,29];
-  gy -= 1600; gm -= 1; gd -= 1;
-  g_d_no = 365*gy + Math.floor((gy+3)/4) - Math.floor((gy+99)/100) + Math.floor((gy+399)/400);
-  for(i=0;i<gm;i++) g_d_no += g_days_in_month[i];
-  if(gm>1 && ((gy%4==0 && gy%100!=0)||(gy%400==0))) g_d_no++;
-  g_d_no += gd;
-  j_d_no = g_d_no - 79;
-  j_np = Math.floor(j_d_no/12053); j_d_no %= 12053;
-  var jy = 979 + 33*j_np + 4*Math.floor(j_d_no/1461);
-  j_d_no %= 1461;
-  if(j_d_no >= 366){jy += Math.floor((j_d_no-1)/365); j_d_no = (j_d_no-1)%365;}
-  for(i=0; i<11 && j_d_no>=j_days_in_month[i]; i++) j_d_no -= j_days_in_month[i];
-  var jm = i+1, jd = j_d_no+1;
-  return [jy, jm, jd];
+function toJalali(gy,gm,gd){
+  var g_days=[31,28,31,30,31,30,31,31,30,31,30,31];
+  var j_days=[31,31,31,31,31,31,30,30,30,30,30,29];
+  gy-=1600;gm-=1;gd-=1;
+  var g_d=365*gy+Math.floor((gy+3)/4)-Math.floor((gy+99)/100)+Math.floor((gy+399)/400);
+  for(var i=0;i<gm;i++)g_d+=g_days[i];
+  if(gm>1&&((gy%4==0&&gy%100!=0)||(gy%400==0)))g_d++;
+  g_d+=gd;
+  var j_d=g_d-79;
+  var j_np=Math.floor(j_d/12053);j_d%=12053;
+  var jy=979+33*j_np+4*Math.floor(j_d/1461);
+  j_d%=1461;
+  if(j_d>=366){jy+=Math.floor((j_d-1)/365);j_d=(j_d-1)%365;}
+  for(i=0;i<11&&j_d>=j_days[i];i++)j_d-=j_days[i];
+  return[jy,i+1,j_d+1];
 }
-
-function updateDate() {
-  var now = new Date();
-  var j = toJalali(now.getFullYear(), now.getMonth()+1, now.getDate());
-  var months = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
-  var days = ['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
-  var dayName = days[now.getDay()];
-  var txt = dayName + ' ' + toFa(j[2]) + ' ' + months[j[1]-1] + ' ' + toFa(j[0]);
-  document.getElementById('jalali-date').textContent = txt;
+function updateDate(){
+  var now=new Date();
+  var j=toJalali(now.getFullYear(),now.getMonth()+1,now.getDate());
+  var months=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+  var days=['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
+  var el=document.getElementById('jalali-date');
+  if(el) el.textContent=days[now.getDay()]+' '+toFa(j[2])+' '+months[j[1]-1]+' '+toFa(j[0]);
 }
 updateDate();
 
-// ===== توابع اعداد =====
-function toFa(n) {
-  return String(n).replace(/\d/g, function(d){ return '۰۱۲۳۴۵۶۷۸۹'[parseInt(d)]; });
-}
+// ===== اعداد =====
+function toFa(n){return String(n).replace(/\d/g,function(d){return'۰۱۲۳۴۵۶۷۸۹'[parseInt(d)];});}
 
-function parseNum(s) {
-  if(!s) return 0;
-  var c = String(s)
-    .replace(/[\u06F0-\u06F9]/g, function(d){ return String.fromCharCode(d.charCodeAt(0)-1728); })
-    .replace(/[\u0660-\u0669]/g, function(d){ return String.fromCharCode(d.charCodeAt(0)-1584); })
+function parseNum(s){
+  if(!s)return 0;
+  var c=String(s)
+    .replace(/[\u06F0-\u06F9]/g,function(d){return String.fromCharCode(d.charCodeAt(0)-1728);})
+    .replace(/[\u0660-\u0669]/g,function(d){return String.fromCharCode(d.charCodeAt(0)-1584);})
     .replace(/[^\d.]/g,'');
-  var n = parseFloat(c);
-  return isNaN(n) ? 0 : n;
+  var n=parseFloat(c);return isNaN(n)?0:n;
 }
 
-function fmt(n) {
-  if(typeof n!=='number'||!isFinite(n)) return '۰';
-  try {
-    return new Intl.NumberFormat('fa-IR', {
-      useGrouping: true,
-      maximumFractionDigits: 0
-    }).format(Math.round(n))
-    .replace(/[\u06F0-\u06F9]/g, function(d){
-      return String.fromCharCode(d.charCodeAt(0)-1728);
-    })
-    .replace(/\d/g, function(d){ return '۰۱۲۳۴۵۶۷۸۹'[parseInt(d)]; });
-  } catch(e) {
-    var s = Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '٬');
-    return toFa(s);
+function fmt(n){
+  if(typeof n!=='number'||!isFinite(n))return'۰';
+  try{
+    return new Intl.NumberFormat('fa-IR',{useGrouping:true,maximumFractionDigits:0}).format(Math.round(n))
+      .replace(/[\u06F0-\u06F9]/g,function(d){return String.fromCharCode(d.charCodeAt(0)-1728);})
+      .replace(/\d/g,function(d){return'۰۱۲۳۴۵۶۷۸۹'[parseInt(d)];});
+  }catch(e){
+    return toFa(Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'٬'));
   }
 }
 
-function fmtDecimal(n) {
-  if(typeof n!=='number'||!isFinite(n)) return '۰';
-  return toFa(n.toString());
-}
-
-// فرمت هنگام blur
-['price','weight','making','profit','tax'].forEach(function(id) {
-  var el = document.getElementById(id);
-  el.addEventListener('input', function(){
-    var pos = this.selectionStart;
-    var raw = String(this.value)
-      .replace(/[\u06F0-\u06F9]/g, function(d){ return String.fromCharCode(d.charCodeAt(0)-1728); })
-      .replace(/[\u0660-\u0669]/g, function(d){ return String.fromCharCode(d.charCodeAt(0)-1584); })
+// فرمت هنگام input
+['price','weight','making','profit','tax'].forEach(function(id){
+  var el=document.getElementById(id);
+  if(!el)return;
+  el.addEventListener('input',function(){
+    var raw=String(this.value)
+      .replace(/[\u06F0-\u06F9]/g,function(d){return String.fromCharCode(d.charCodeAt(0)-1728);})
+      .replace(/[\u0660-\u0669]/g,function(d){return String.fromCharCode(d.charCodeAt(0)-1584);})
       .replace(/[^\d.]/g,'');
-    var parts = raw.split('.');
-    var intPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    var formatted = parts.length > 1 ? intPart + '.' + parts[1] : intPart;
-    // تبدیل به فارسی
-    formatted = formatted
-      .replace(/\d/g, function(d){ return '۰۱۲۳۴۵۶۷۸۹'[parseInt(d)]; })
-      .replace(/,/g, '٬');
-    this.value = formatted;
+    var parts=raw.split('.');
+    var intPart=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g,',');
+    var formatted=parts.length>1?intPart+'.'+parts[1]:intPart;
+    formatted=formatted.replace(/\d/g,function(d){return'۰۱۲۳۴۵۶۷۸۹'[parseInt(d)];}).replace(/,/g,'٬');
+    this.value=formatted;
   });
-  el.addEventListener('blur', function(){
-    var n = parseNum(this.value);
-   if(n > 0) {
-  if(id === 'weight') {
-    this.value = toFa(n.toString());
-  } else {
-    this.value = toFa(Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '٬'));
-  }
-}
+  el.addEventListener('blur',function(){
+    var n=parseNum(this.value);
+    if(n>0){
+      if(id==='weight'){this.value=toFa(n.toString());}
+      else{this.value=toFa(Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'٬'));}
+    }
   });
 });
 
 // آمار
-var cnt = parseInt(localStorage.getItem('ac')||'0');
-document.getElementById('cc').textContent = toFa(cnt);
+var cnt=parseInt(localStorage.getItem('ac')||'0');
+var ccEl=document.getElementById('cc');
+if(ccEl)ccEl.textContent=toFa(cnt);
 
-// ===== اعتبارسنجی =====
+// ===== لاگین / ثبت نام =====
+function switchTab(tab){
+  document.querySelectorAll('.auth-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.auth-form').forEach(function(f){f.classList.remove('active');});
+  if(tab==='login'){
+    document.querySelectorAll('.auth-tab')[0].classList.add('active');
+    document.getElementById('form-login').classList.add('active');
+  } else {
+    document.querySelectorAll('.auth-tab')[1].classList.add('active');
+    document.getElementById('form-register').classList.add('active');
+  }
+  hideAuthMsg();
+}
+
+function showAuthMsg(msg, type){
+  var el=document.getElementById('auth-msg');
+  el.textContent=msg; el.className='auth-msg '+type; el.style.display='block';
+}
+function hideAuthMsg(){
+  document.getElementById('auth-msg').style.display='none';
+}
+
+function setAuthLoading(show){
+  document.getElementById('auth-loading').style.display=show?'block':'none';
+}
+
+function doLogin(){
+  var username=document.getElementById('login-username').value.trim();
+  var password=document.getElementById('login-password').value;
+  if(!username||!password){showAuthMsg('لطفاً همه فیلدها را پر کنید','error');return;}
+  setAuthLoading(true); hideAuthMsg();
+  fetch(API_BASE+'/app-login.php',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({username:username,password:password})
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    setAuthLoading(false);
+    if(data.success){
+      localStorage.setItem('app_token',data.token);
+      localStorage.setItem('app_username',data.username);
+      showMainScreen(data.username);
+    } else {
+      showAuthMsg(data.message,'error');
+    }
+  })
+  .catch(function(){
+    setAuthLoading(false);
+    showAuthMsg('خطا در اتصال به سرور','error');
+  });
+}
+
+function doRegister(){
+  var username=document.getElementById('reg-username').value.trim();
+  var email=document.getElementById('reg-email').value.trim();
+  var password=document.getElementById('reg-password').value;
+  if(!username||!email||!password){showAuthMsg('لطفاً همه فیلدها را پر کنید','error');return;}
+  setAuthLoading(true); hideAuthMsg();
+  fetch(API_BASE+'/app-register.php',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({username:username,email:email,password:password})
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    setAuthLoading(false);
+    if(data.success){
+      showAuthMsg('ثبت نام موفق! اکنون وارد شوید','success');
+      switchTab('login');
+      document.getElementById('login-username').value=username;
+    } else {
+      showAuthMsg(data.message,'error');
+    }
+  })
+  .catch(function(){
+    setAuthLoading(false);
+    showAuthMsg('خطا در اتصال به سرور','error');
+  });
+}
+
+function doLogout(){
+  localStorage.removeItem('app_token');
+  localStorage.removeItem('app_username');
+  document.getElementById('main-screen').style.display='none';
+  document.getElementById('auth-screen').style.display='flex';
+}
+
+function showMainScreen(username){
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('main-screen').style.display='block';
+  document.getElementById('username-display').textContent=username;
+  updateDate(); updateClock();
+}
+
+// بررسی توکن ذخیره شده
+function checkSavedToken(){
+  var token=localStorage.getItem('app_token');
+  var username=localStorage.getItem('app_username');
+  if(!token){return;}
+  fetch(API_BASE+'/app-verify.php',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({token:token})
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(data.success){
+      showMainScreen(data.username);
+    }
+  })
+  .catch(function(){});
+}
+
+checkSavedToken();
+
+// Enter در فرم لاگین
+document.getElementById('login-password').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+
+// ===== ماشین حساب =====
 function clr(){
-  ['e1','e2','e3','e4','e5'].forEach(function(i){
-    var e=document.getElementById(i); e.textContent=''; e.style.display='none';
-  });
-  ['g1','g2','g3','g4','g5'].forEach(function(i){
-    document.getElementById(i).className='ig';
-  });
+  ['e1','e2','e3','e4','e5'].forEach(function(i){var e=document.getElementById(i);e.textContent='';e.style.display='none';});
+  ['g1','g2','g3','g4','g5'].forEach(function(i){document.getElementById(i).className='ig';});
   document.getElementById('eb').style.display='none';
 }
-
 function se(ei,gi,m){
-  var e=document.getElementById(ei); e.textContent=m; e.style.display='block';
+  var e=document.getElementById(ei);e.textContent=m;e.style.display='block';
   document.getElementById(gi).className='ig err';
 }
-
 function validate(){
-  clr();
-  var ok=true;
+  clr();var ok=true;
   var pr=parseNum(document.getElementById('price').value);
   var w=parseNum(document.getElementById('weight').value);
   var mk=parseNum(document.getElementById('making').value);
@@ -620,76 +858,46 @@ function validate(){
   if(tx<0||tx>100){se('e5','g5','بین ۰ تا ۱۰۰ درصد');ok=false;}
   return ok;
 }
-
-// ===== محاسبه =====
 function calc(){
   clr();
-  if(!validate()){
-    var eb=document.getElementById('eb');
-    eb.textContent='لطفاً مقادیر را اصلاح کنید';
-    eb.style.display='block';
-    return;
-  }
-  var ld=document.getElementById('ld'), cb=document.getElementById('cb');
-  ld.style.display='block'; cb.disabled=true;
-
+  if(!validate()){var eb=document.getElementById('eb');eb.textContent='لطفاً مقادیر را اصلاح کنید';eb.style.display='block';return;}
+  var ld=document.getElementById('ld'),cb=document.getElementById('cb');
+  ld.style.display='block';cb.disabled=true;
   setTimeout(function(){
     var pr=parseNum(document.getElementById('price').value);
     var w=parseNum(document.getElementById('weight').value);
     var mk=parseNum(document.getElementById('making').value)||0;
     var pf=parseNum(document.getElementById('profit').value)||0;
     var tx=parseNum(document.getElementById('tax').value)||0;
-
-    var mv=pr*w;
-    var mfv=(pr*mk/100)*w;
-    var s1=mv+mfv;
-    var pv=s1*pf/100;
-    var txv=(mfv+pv)*tx/100;
-    var tot=s1+pv+txv;
-    var be=tot/w;
-
-    document.getElementById('mv').textContent  = fmt(mv)  + ' تومان';
-    document.getElementById('mfv').textContent = fmt(mfv) + ' تومان';
-    document.getElementById('s1').textContent  = fmt(s1)  + ' تومان';
-    document.getElementById('pv').textContent  = fmt(pv)  + ' تومان';
-    document.getElementById('tv').textContent  = fmt(txv) + ' تومان';
-    document.getElementById('tp').textContent  = fmt(tot) + ' تومان';
-
+    var mv=pr*w,mfv=(pr*mk/100)*w,s1=mv+mfv,pv=s1*pf/100,txv=(mfv+pv)*tx/100,tot=s1+pv+txv,be=tot/w;
+    document.getElementById('mv').textContent=fmt(mv)+' تومان';
+    document.getElementById('mfv').textContent=fmt(mfv)+' تومان';
+    document.getElementById('s1').textContent=fmt(s1)+' تومان';
+    document.getElementById('pv').textContent=fmt(pv)+' تومان';
+    document.getElementById('tv').textContent=fmt(txv)+' تومان';
+    document.getElementById('tp').textContent=fmt(tot)+' تومان';
     var fp=document.getElementById('fp');
-    fp.textContent = fmt(tot) + ' تومان';
+    fp.textContent=fmt(tot)+' تومان';
     fp.classList.add('pulse');
-    setTimeout(function(){ fp.classList.remove('pulse'); }, 500);
-
-    document.getElementById('be').textContent = 'نقطه سربه‌سر هر گرم: ' + fmt(be) + ' تومان';
-
-    var rc=document.getElementById('rc');
-    rc.style.display='block';
-    rc.scrollIntoView({behavior:'smooth', block:'nearest'});
-
-    cnt++;
-    localStorage.setItem('ac', cnt);
-    document.getElementById('cc').textContent = toFa(cnt);
-
+    setTimeout(function(){fp.classList.remove('pulse');},500);
+    document.getElementById('be').textContent='نقطه سربه‌سر هر گرم: '+fmt(be)+' تومان';
+    var rc=document.getElementById('rc');rc.style.display='block';
+    rc.scrollIntoView({behavior:'smooth',block:'nearest'});
+    cnt++;localStorage.setItem('ac',cnt);
+    document.getElementById('cc').textContent=toFa(cnt);
     ['g1','g2','g3','g4','g5'].forEach(function(i){
       var el=document.getElementById(i).querySelector('input');
-      if(el&&el.value.trim()) document.getElementById(i).className='ig ok';
+      if(el&&el.value.trim())document.getElementById(i).className='ig ok';
     });
-
-    ld.style.display='none'; cb.disabled=false;
-  }, 400);
+    ld.style.display='none';cb.disabled=false;
+  },400);
 }
-
-// ===== بازنشانی =====
 function reset(){
-  ['price','weight','making','profit','tax'].forEach(function(i){
-    document.getElementById(i).value='';
-  });
-  clr();
-  document.getElementById('rc').style.display='none';
+  ['price','weight','making','profit','tax'].forEach(function(i){document.getElementById(i).value='';});
+  clr();document.getElementById('rc').style.display='none';
   document.getElementById('price').focus();
 }
-
-document.addEventListener('keydown', function(e){ if(e.key==='Enter') calc(); });
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('main-screen').style.display!=='none')calc();});
 </script>
 </body>
 </html>
