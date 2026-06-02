@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        webView.loadUrl("file:///android_asset/calculator.html");
+        webView.loadUrl("https://ahwaz.gt.tc/calculator.html");
     }
 
     @Override
