@@ -568,7 +568,7 @@ function fmt(n) {
   });
   el.addEventListener('blur', function(){
     var n = parseNum(this.value);
-    if(n > 0) this.value = new Intl.NumberFormat('fa-IR').format(n);
+    if(n > 0) this.value = toFa(Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '٬'));
   });
 });
 
