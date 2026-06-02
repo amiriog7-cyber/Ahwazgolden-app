@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        webView.loadUrl("https://ahwaz.gt.tc/calculator.html");
+        webView.loadUrl("https://ahwazgolden.ir/calculator.html");
     }
 
     @Override
