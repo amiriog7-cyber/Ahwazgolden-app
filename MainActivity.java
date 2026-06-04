@@ -2,6 +2,10 @@ package com.ahwazgolden.calculator;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -9,13 +13,16 @@ import android.webkit.WebViewClient;
 import android.webkit.WebChromeClient;
 import android.view.View;
 import android.widget.ProgressBar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class MainActivity extends Activity {
 
     private WebView webView;
     private ProgressBar progressBar;
+    private static final int NOTIFICATION_PERMISSION_CODE = 100;
 
-    @SuppressLint({"SetJavaScriptEnabled", "SetJavaScriptEnabled"})
+    @SuppressLint({"SetJavaScriptEnabled"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +49,6 @@ public class MainActivity extends Activity {
                 view.loadUrl(url);
                 return true;
             }
-
             @Override
             public void onPageFinished(WebView view, String url) {
                 progressBar.setVisibility(View.GONE);
@@ -62,6 +68,38 @@ public class MainActivity extends Activity {
         });
 
         webView.loadUrl("file:///android_asset/calculator.html");
+
+        // درخواست اجازه نوتیفیکیشن
+        requestNotificationPermission();
+    }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this,
+                    android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // نمایش توضیح قبل از درخواست
+                new AlertDialog.Builder(this)
+                    .setTitle("فعال‌سازی اعلان‌ها")
+                    .setMessage("برای دریافت آخرین قیمت‌های طلا و اطلاعیه‌های مهم، لطفاً اجازه نمایش اعلان را بدهید.")
+                    .setPositiveButton("فعال کردن", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                ActivityCompat.requestPermissions(
+                                    MainActivity.this,
+                                    new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
+                                    NOTIFICATION_PERMISSION_CODE
+                                );
+                            }
+                        }
+                    })
+                    .setNegativeButton("بعداً", null)
+                    .setCancelable(true)
+                    .show();
+            }
+        }
     }
 
     @Override
