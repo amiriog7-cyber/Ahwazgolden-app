@@ -7,10 +7,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class MyFirebaseService extends FirebaseMessagingService {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // عضویت خودکار در topic اهواز گلدن
+        FirebaseMessaging.getInstance().subscribeToTopic("ahwazgolden");
+        FirebaseMessaging.getInstance().subscribeToTopic("prices");
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+    }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -42,6 +52,7 @@ public class MyFirebaseService extends FirebaseMessagingService {
             NotificationChannel channel = new NotificationChannel(
                     channelId, "اهواز گلدن", NotificationManager.IMPORTANCE_HIGH);
             channel.setDescription("اطلاعیه‌های اهواز گلدن");
+            channel.enableVibration(true);
             manager.createNotificationChannel(channel);
         }
 
@@ -54,15 +65,19 @@ public class MyFirebaseService extends FirebaseMessagingService {
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setContentTitle(title)
                 .setContentText(body)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(body))
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent);
 
-        manager.notify(0, builder.build());
+        manager.notify((int) System.currentTimeMillis(), builder.build());
     }
 
     @Override
     public void onNewToken(String token) {
-        // توکن جدید — میتونی به سرور بفرستی
+        // عضویت مجدد در topics بعد از توکن جدید
+        FirebaseMessaging.getInstance().subscribeToTopic("ahwazgolden");
+        FirebaseMessaging.getInstance().subscribeToTopic("prices");
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
     }
 }
