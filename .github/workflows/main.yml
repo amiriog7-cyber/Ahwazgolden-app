@@ -88,24 +88,23 @@ jobs:
           /opt/gradle/gradle-8.1.1/bin/gradle assembleRelease --stacktrace
 
       - name: Sign APK
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
-          keytool -genkey -v -keystore ahwazgolden.jks \
-            -alias ahwazgolden -keyalg RSA -keysize 2048 -validity 10000 \
-            -storepass ahwaz1234 -keypass ahwaz1234 \
-            -dname "CN=AhwazGolden, OU=App, O=AhwazGolden, L=Ahwaz, ST=Khuzestan, C=IR"
-          
+          echo $KEYSTORE_BASE64 | base64 -d > ahwazgolden-release.jks
           APKSIGNER=$(find /usr/local/lib/android/sdk/build-tools -name "apksigner" | head -1)
           $APKSIGNER sign \
-            --ks ahwazgolden.jks \
-            --ks-pass pass:ahwaz1234 \
-            --key-pass pass:ahwaz1234 \
+            --ks ahwazgolden-release.jks \
+            --ks-pass pass:Ahwaz1345 \
+            --key-pass pass:Ahwaz1345 \
             --ks-key-alias ahwazgolden \
-            --out app-signed.apk \
+            --out app-release-signed.apk \
             app/build/outputs/apk/release/app-release-unsigned.apk
+
       - uses: actions/upload-artifact@v4
         with:
           name: AhwazGolden-Calculator
-          path: app-signed.apk
+          path: app-release-signed.apk
           retention-days: 30
 
       - uses: actions/upload-artifact@v4
