@@ -91,7 +91,7 @@ jobs:
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
-          echo $KEYSTORE_BASE64 | base64 -d > ahwazgolden-release.jks
+          echo "$KEYSTORE_BASE64" | tr -d '\n' | base64 -d > ahwazgolden-release.jks
           APKSIGNER=$(find /usr/local/lib/android/sdk/build-tools -name "apksigner" | head -1)
           $APKSIGNER sign \
             --ks ahwazgolden-release.jks \
