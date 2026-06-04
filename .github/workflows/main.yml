@@ -85,7 +85,28 @@ jobs:
         run: |
           wget -q https://services.gradle.org/distributions/gradle-8.1.1-bin.zip -O /tmp/gradle.zip
           sudo unzip -q /tmp/gradle.zip -d /opt/gradle
-          /opt/gradle/gradle-8.1.1/bin/gradle assembleDebug --stacktrace
+          /opt/gradle/gradle-8.1.1/bin/gradle assembleRelease --stacktrace
+
+      - name: Sign APK
+        run: |
+          keytool -genkey -v -keystore ahwazgolden.jks \
+            -alias ahwazgolden -keyalg RSA -keysize 2048 -validity 10000 \
+            -storepass ahwaz1234 -keypass ahwaz1234 \
+            -dname "CN=AhwazGolden, OU=App, O=AhwazGolden, L=Ahwaz, S=Khuzestan, C=IR"
+          
+          /opt/gradle/gradle-8.1.1/bin/gradle/bin/apksigner sign \
+            --ks ahwazgolden.jks \
+            --ks-pass pass:ahwaz1234 \
+            --key-pass pass:ahwaz1234 \
+            --ks-key-alias ahwazgolden \
+            --out app-signed.apk \
+            app/build/outputs/apk/release/app-release-unsigned.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AhwazGolden-Calculator
+          path: app-signed.apk
+          retention-days: 30
 
       - uses: actions/upload-artifact@v4
         with:
