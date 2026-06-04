@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends Activity {
 
@@ -69,8 +70,18 @@ public class MainActivity extends Activity {
 
         webView.loadUrl("file:///android_asset/calculator.html");
 
+        // عضویت در Topics - از همان لحظه اول
+        subscribeToTopics();
+
         // درخواست اجازه نوتیفیکیشن
         requestNotificationPermission();
+    }
+
+    private void subscribeToTopics() {
+        FirebaseMessaging.getInstance().subscribeToTopic("ahwazgolden");
+        FirebaseMessaging.getInstance().subscribeToTopic("all_users");
+        FirebaseMessaging.getInstance().subscribeToTopic("prices");
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
     }
 
     private void requestNotificationPermission() {
@@ -79,7 +90,6 @@ public class MainActivity extends Activity {
                     android.Manifest.permission.POST_NOTIFICATIONS)
                     != PackageManager.PERMISSION_GRANTED) {
 
-                // نمایش توضیح قبل از درخواست
                 new AlertDialog.Builder(this)
                     .setTitle("فعال‌سازی اعلان‌ها")
                     .setMessage("برای دریافت آخرین قیمت‌های طلا و اطلاعیه‌های مهم، لطفاً اجازه نمایش اعلان را بدهید.")
