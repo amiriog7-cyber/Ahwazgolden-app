@@ -18,10 +18,13 @@ jobs:
           mkdir -p app/src/main/res/layout
           mkdir -p app/src/main/res/values
           mkdir -p app/src/main/res/mipmap-hdpi
+          mkdir -p app/src/main/res/xml
           mkdir -p app/src/main/assets
           mkdir -p gradle/wrapper
           cp AndroidManifest.xml app/src/main/AndroidManifest.xml
           cp MainActivity.java app/src/main/java/com/ahwazgolden/calculator/
+          cp MyFirebaseService.java app/src/main/java/com/ahwazgolden/calculator/
+          cp google-services.json app/
           cp activity_main.xml app/src/main/res/layout/
           cp strings.xml app/src/main/res/values/
           cp styles.xml app/src/main/res/values/
@@ -29,11 +32,14 @@ jobs:
           cp ic_launcher.png app/src/main/res/mipmap-hdpi/
           cp ic_launcher_round.png app/src/main/res/mipmap-hdpi/
           cp gradle-wrapper.properties gradle/wrapper/
-          mv build.gradle app/build.gradle || true
           chmod +x gradlew
-          cat > app/build.gradle << 'EOF'
+
+      - name: Create app/build.gradle
+        run: |
+          cat > app/build.gradle << 'GRADLE'
           plugins {
               id 'com.android.application'
+              id 'com.google.gms.google-services'
           }
           android {
               namespace 'com.ahwazgolden.calculator'
@@ -55,30 +61,32 @@ jobs:
           }
           dependencies {
               implementation 'androidx.appcompat:appcompat:1.6.1'
+              implementation platform('com.google.firebase:firebase-bom:32.7.0')
+              implementation 'com.google.firebase:firebase-messaging'
           }
-          EOF
+          GRADLE
+
       - name: Create root build.gradle
         run: |
-          cat > build.gradle << 'EOF'
+          cat > build.gradle << 'GRADLE'
           buildscript {
               repositories { google(); mavenCentral() }
-              dependencies { classpath 'com.android.tools.build:gradle:8.1.0' }
+              dependencies {
+                  classpath 'com.android.tools.build:gradle:8.1.0'
+                  classpath 'com.google.gms:google-services:4.4.0'
+              }
           }
           allprojects {
               repositories { google(); mavenCentral() }
           }
-          EOF
+          GRADLE
+
       - name: Build APK
         run: |
-          cat > gradlew << 'GRADLEW'
-          #!/bin/sh
-          CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
-          exec java -jar gradle/wrapper/gradle-wrapper.jar "$@"
-          GRADLEW
-          
           wget -q https://services.gradle.org/distributions/gradle-8.1.1-bin.zip -O /tmp/gradle.zip
           sudo unzip -q /tmp/gradle.zip -d /opt/gradle
           /opt/gradle/gradle-8.1.1/bin/gradle assembleDebug --stacktrace
+
       - uses: actions/upload-artifact@v4
         with:
           name: AhwazGolden-Calculator
