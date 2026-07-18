@@ -61,11 +61,39 @@
     .app-title h1 { color: var(--gold); font-size: 16px; font-weight: 800; }
     .app-title p { color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 2px; }
     .header-actions { display: flex; align-items: center; gap: 8px; }
-    .user-badge { background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; padding: 4px 10px; color: var(--gold2); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
-    .logout-btn { background: rgba(229,62,62,0.15); border: 1px solid rgba(229,62,62,0.3); border-radius: 20px; padding: 5px 10px; color: #fc8181; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Vazirmatn', Tahoma, sans-serif; }
-    .theme-toggle { background: var(--toggle-bg); border: none; border-radius: 20px; width: 46px; height: 26px; cursor: pointer; position: relative; transition: all 0.3s; flex-shrink: 0; }
-    .theme-toggle::after { content: ''; position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; background: var(--toggle-circle); border-radius: 50%; transition: all 0.3s; }
-    [data-theme="dark"] .theme-toggle::after { right: calc(100% - 23px); }
+    .hamburger-btn { width: 40px; height: 40px; border-radius: 12px; background: rgba(212,175,55,0.14); border: 1px solid rgba(212,175,55,0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; }
+    .hamburger-btn span { display: block; width: 18px; height: 2px; background: var(--gold2); border-radius: 2px; transition: all 0.25s ease; }
+    .hamburger-btn.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .hamburger-btn.open span:nth-child(2) { opacity: 0; }
+    .hamburger-btn.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    /* اورلی و کشوی منو */
+    .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); opacity: 0; pointer-events: none; transition: opacity 0.25s ease; z-index: 300; }
+    .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+    .drawer { position: fixed; top: 0; bottom: 0; right: 0; width: 80%; max-width: 320px; background: var(--card); z-index: 301; transform: translateX(100%); transition: transform 0.28s cubic-bezier(.4,0,.2,1); display: flex; flex-direction: column; box-shadow: -8px 0 30px rgba(0,0,0,0.25); }
+    .drawer.open { transform: translateX(0); }
+    .drawer-user { background: var(--header-bg); padding: 22px 18px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .drawer-user .avatar { width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), #c9a236); display: flex; align-items: center; justify-content: center; color: #1a1a2e; font-weight: 800; font-size: 18px; flex-shrink: 0; }
+    .drawer-user .who { min-width: 0; }
+    .drawer-user .who .name { color: #fff; font-weight: 700; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .drawer-user .who .sub { color: rgba(255,255,255,0.55); font-size: 11px; margin-top: 2px; }
+    .drawer-menu { padding: 10px 0; overflow-y: auto; flex: 1; }
+    .drawer-item { display: flex; align-items: center; gap: 12px; padding: 13px 18px; color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer; border-right: 3px solid transparent; font-family: 'Vazirmatn', Tahoma, sans-serif; background: none; border-top: none; border-left: none; border-bottom: none; width: 100%; text-align: right; }
+    .drawer-item .ic { width: 22px; text-align: center; font-size: 16px; }
+    .drawer-item.active { background: rgba(212,175,55,0.1); border-right-color: var(--gold); color: #8a6d1a; }
+    [data-theme="dark"] .drawer-item.active { background: rgba(212,175,55,0.15); color: var(--gold2); }
+    .drawer-item:active { background: rgba(0,0,0,0.04); }
+    .drawer-settings { padding: 10px 18px; }
+    .drawer-settings .settings-head { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+    .settings-row { display: flex; align-items: center; justify-content: space-between; padding-right: 34px; }
+    .settings-row .lbl { font-size: 13px; color: var(--label); font-weight: 500; }
+    .theme-switch { width: 44px; height: 24px; border-radius: 20px; background: var(--toggle-bg); position: relative; cursor: pointer; flex-shrink: 0; }
+    .theme-switch::after { content: ''; position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--toggle-circle); transition: 0.25s; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+    [data-theme="dark"] .theme-switch { background: linear-gradient(135deg, var(--gold), #c9a236); }
+    [data-theme="dark"] .theme-switch::after { right: calc(100% - 21px); }
+    .drawer-divider { height: 1px; background: var(--row-border); margin: 6px 18px; }
+    .drawer-footer { padding: 14px 18px 20px; flex-shrink: 0; }
+    .logout-item { display: flex; align-items: center; gap: 12px; color: var(--error); font-weight: 700; font-size: 14px; cursor: pointer; background: none; border: none; width: 100%; text-align: right; font-family: 'Vazirmatn', Tahoma, sans-serif; }
     .datetime-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px 12px; }
     .date-display { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.75); font-size: 13px; font-weight: 500; }
     .time-display { background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; padding: 4px 14px; color: var(--gold2); font-size: 15px; font-weight: 700; letter-spacing: 1px; }
@@ -133,7 +161,6 @@
     .price-update-time { color: rgba(255,255,255,0.4); font-size: 10px; text-align: center; margin-top: 6px; }
 
     /* دکمه پروفایل در هدر */
-    .profile-btn { background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; padding: 5px 10px; color: var(--gold2); font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Vazirmatn', Tahoma, sans-serif; }
 
     /* اورلی مودال پروفایل */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; align-items: flex-end; justify-content: center; }
@@ -207,10 +234,9 @@
         <div><h1>ماشین حساب طلا</h1><p>Ahwaz Golden</p></div>
       </div>
       <div class="header-actions">
-        <div class="user-badge">👤 <span id="username-display"></span></div>
-        <button class="profile-btn" onclick="openProfile()">پروفایل</button>
-        <button class="logout-btn" onclick="doLogout()">خروج</button>
-        <button class="theme-toggle" onclick="toggleTheme()"></button>
+        <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleDrawer()">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
     <div class="datetime-bar">
@@ -280,6 +306,44 @@
   </div>
 </div>
 
+<!-- اورلی و کشوی منوی همبرگری -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-user">
+    <div class="avatar" id="drawerAvatar">?</div>
+    <div class="who">
+      <div class="name" id="username-display">—</div>
+      <div class="sub" id="drawerJoinDate"></div>
+    </div>
+  </div>
+
+  <div class="drawer-menu">
+    <button type="button" class="drawer-item active" onclick="toggleDrawer()">
+      <span class="ic">🧮</span> ماشین حساب طلا
+    </button>
+    <button type="button" class="drawer-item" onclick="openProfile(); toggleDrawer();">
+      <span class="ic">👤</span> پروفایل
+    </button>
+
+    <div class="drawer-divider"></div>
+
+    <div class="drawer-settings">
+      <div class="settings-head"><span class="ic">⚙️</span> تنظیمات</div>
+      <div class="settings-row">
+        <span class="lbl" id="themeLabel">حالت شب</span>
+        <div class="theme-switch" onclick="toggleTheme()"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer-footer">
+    <div class="drawer-divider" style="margin:0 0 14px;"></div>
+    <button type="button" class="logout-item" onclick="doLogout()">
+      <span class="ic">🚪</span> خروج از حساب کاربری
+    </button>
+  </div>
+</div>
+
 <!-- مودال پروفایل کاربر -->
 <div class="modal-overlay" id="profile-overlay">
   <div class="modal-sheet">
@@ -337,6 +401,19 @@ function toggleTheme() {
   theme = theme === 'light' ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
+  updateThemeLabel();
+}
+function updateThemeLabel(){
+  var el = document.getElementById('themeLabel');
+  if(el) el.textContent = theme === 'dark' ? 'حالت روز' : 'حالت شب';
+}
+updateThemeLabel();
+
+// ===== منوی همبرگری =====
+function toggleDrawer(){
+  document.getElementById('drawer').classList.toggle('open');
+  document.getElementById('drawerOverlay').classList.toggle('open');
+  document.getElementById('hamburgerBtn').classList.toggle('open');
 }
 
 // ===== ساعت =====
@@ -601,6 +678,9 @@ function doLogout(){
   document.getElementById('main-screen').style.display='none';
   document.getElementById('force-pw-screen').style.display='none';
   document.getElementById('profile-overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawerOverlay').classList.remove('open');
+  document.getElementById('hamburgerBtn').classList.remove('open');
   document.getElementById('auth-screen').style.display='flex';
 }
 
@@ -699,9 +779,27 @@ function showMainScreen(username){
   document.getElementById('auth-screen').style.display='none';
   document.getElementById('main-screen').style.display='block';
   document.getElementById('username-display').textContent=username;
+  var avatarEl=document.getElementById('drawerAvatar');
+  if(avatarEl) avatarEl.textContent = username ? username.charAt(0).toUpperCase() : '?';
   updateDate(); updateClock();
   loadServerStats();
   loadPrices();
+  loadDrawerJoinDate();
+}
+function loadDrawerJoinDate(){
+  var token=localStorage.getItem('app_token');
+  httpPost(API_BASE+'/app-profile.php',{token:token,action:'get'},
+    function(data){
+      var el=document.getElementById('drawerJoinDate');
+      if(el && data.success && data.registered_at){
+        var parts=data.registered_at.split(/[- :]/); // YYYY-MM-DD HH:MM:SS
+        var j=toJalali(parseInt(parts[0]),parseInt(parts[1]),parseInt(parts[2]));
+        var months=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+        el.textContent='عضو از '+months[j[1]-1]+' '+toFa(j[0]);
+      }
+    },
+    function(){}
+  );
 }
 
 function checkSavedToken(){
