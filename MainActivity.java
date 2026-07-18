@@ -3,8 +3,11 @@ package com.ahwazgolden.calculator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.webkit.WebSettings;
@@ -15,7 +18,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends Activity {
 
@@ -47,7 +49,33 @@ public class MainActivity extends Activity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
+                // آدرس‌های عادی سایت داخل همین وب‌ویو باز شوند
+                if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("file://")) {
+                    view.loadUrl(url);
+                    return true;
+                }
+
+                // سایر آدرس‌ها (مثل intent:// برای باز کردن اپ بله) با Intent جدا هندل شوند
+                try {
+                    Intent intent;
+                    if (url.startsWith("intent://")) {
+                        intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+                    } else {
+                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    }
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(intent);
+                    } else {
+                        // اپ مقصد (مثلاً بله) نصب نیست؛ اگر لینک fallback داشت، همان را باز کن
+                        String fallbackUrl = intent.getStringExtra("browser_fallback_url");
+                        if (fallbackUrl != null) {
+                            view.loadUrl(fallbackUrl);
+                        }
+                    }
+                } catch (java.net.URISyntaxException | ActivityNotFoundException e) {
+                    // لینک نامعتبر یا اپی برای بازکردنش نبود؛ نادیده گرفته می‌شود
+                }
                 return true;
             }
             @Override
@@ -70,18 +98,8 @@ public class MainActivity extends Activity {
 
         webView.loadUrl("file:///android_asset/calculator.html");
 
-        // عضویت در Topics - از همان لحظه اول
-        subscribeToTopics();
-
         // درخواست اجازه نوتیفیکیشن
         requestNotificationPermission();
-    }
-
-    private void subscribeToTopics() {
-        FirebaseMessaging.getInstance().subscribeToTopic("ahwazgolden");
-        FirebaseMessaging.getInstance().subscribeToTopic("all_users");
-        FirebaseMessaging.getInstance().subscribeToTopic("prices");
-        FirebaseMessaging.getInstance().subscribeToTopic("news");
     }
 
     private void requestNotificationPermission() {
@@ -90,6 +108,7 @@ public class MainActivity extends Activity {
                     android.Manifest.permission.POST_NOTIFICATIONS)
                     != PackageManager.PERMISSION_GRANTED) {
 
+                // نمایش توضیح قبل از درخواست
                 new AlertDialog.Builder(this)
                     .setTitle("فعال‌سازی اعلان‌ها")
                     .setMessage("برای دریافت آخرین قیمت‌های طلا و اطلاعیه‌های مهم، لطفاً اجازه نمایش اعلان را بدهید.")
