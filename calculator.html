@@ -128,6 +128,33 @@
     .price-load-btn { width: 100%; padding: 10px; background: linear-gradient(135deg, var(--gold), #c9a236); color: #1a1a2e; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Vazirmatn', Tahoma, sans-serif; }
     .price-loading { color: rgba(255,255,255,0.5); font-size: 12px; text-align: center; padding: 8px; }
     .price-update-time { color: rgba(255,255,255,0.4); font-size: 10px; text-align: center; margin-top: 6px; }
+
+    /* دکمه پروفایل در هدر */
+    .profile-btn { background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; padding: 5px 10px; color: var(--gold2); font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Vazirmatn', Tahoma, sans-serif; }
+
+    /* اورلی مودال پروفایل */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; align-items: flex-end; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal-sheet { background: var(--card); width: 100%; max-width: 500px; border-radius: 20px 20px 0 0; padding: 20px; max-height: 88vh; overflow-y: auto; animation: fadeIn 0.25s ease; }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .modal-head h2 { font-size: 16px; color: var(--text); }
+    .modal-close { background: none; border: none; font-size: 20px; color: var(--light-text); cursor: pointer; padding: 4px 8px; }
+    .profile-section { margin-bottom: 18px; }
+    .profile-section h3 { font-size: 13px; color: var(--label); margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+    .profile-readonly { background: var(--body-bg); border-radius: 10px; padding: 10px 14px; font-size: 14px; color: var(--text); margin-bottom: 10px; display:flex; justify-content:space-between; }
+    .profile-readonly span:first-child { color: var(--light-text); font-size: 12px; }
+    .profile-msg { text-align: center; padding: 10px; border-radius: 10px; font-size: 12px; margin-bottom: 10px; display:none; }
+    .profile-msg.error { background: rgba(229,62,62,0.1); color: var(--error); border: 1px solid var(--error); }
+    .profile-msg.success { background: rgba(56,161,105,0.1); color: var(--success); border: 1px solid var(--success); }
+    .profile-save-btn { width: 100%; padding: 12px; background: linear-gradient(135deg, var(--gold), #c9a236); color: #1a1a2e; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Vazirmatn', Tahoma, sans-serif; margin-top: 4px; }
+
+    /* صفحه اجبار تغییر رمز عبور (بعد از ورود با رمز موقت) */
+    #force-pw-screen { display:none; position: fixed; inset:0; background: linear-gradient(135deg, #1a1a2e 0%, #2d3561 50%, #0f3460 100%); z-index: 300; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
+    #force-pw-screen .fpw-box { background: white; border-radius: 20px; padding: 24px 20px; max-width: 420px; width: 100%; }
+    [data-theme="dark"] #force-pw-screen .fpw-box { background: #1e2535; }
+    #force-pw-screen .fpw-icon { text-align:center; font-size: 34px; margin-bottom: 8px; }
+    #force-pw-screen h2 { text-align:center; color: var(--text); font-size: 16px; margin-bottom: 6px; }
+    #force-pw-screen p { text-align:center; color: var(--light-text); font-size: 12px; margin-bottom: 18px; }
   </style>
 </head>
 <body>
@@ -154,6 +181,7 @@
     <div class="auth-form" id="form-register">
       <div class="auth-field"><label>نام کاربری</label><input type="text" id="reg-username" placeholder="نام کاربری دلخواه" autocomplete="off"></div>
       <div class="auth-field"><label>ایمیل</label><input type="email" id="reg-email" placeholder="ایمیل خود را وارد کنید"></div>
+      <div class="auth-field"><label>شماره تماس (اختیاری - برای بازیابی حساب)</label><input type="tel" id="reg-phone" placeholder="09xxxxxxxxx"></div>
       <div class="auth-field"><label>رمز عبور (حداقل ۶ کاراکتر)</label><input type="password" id="reg-password" placeholder="رمز عبور دلخواه"></div>
       <button class="auth-btn" onclick="doRegister()">ثبت نام</button>
     </div>
@@ -170,6 +198,7 @@
       </div>
       <div class="header-actions">
         <div class="user-badge">👤 <span id="username-display"></span></div>
+        <button class="profile-btn" onclick="openProfile()">پروفایل</button>
         <button class="logout-btn" onclick="doLogout()">خروج</button>
         <button class="theme-toggle" onclick="toggleTheme()"></button>
       </div>
@@ -238,6 +267,51 @@
       <div class="sr"><span>محاسبات من (این دستگاه):</span><span class="sv" id="cc">۰</span></div>
     </div>
     <div class="footer">© 2026 Ahwaz Golden — تمامی حقوق محفوظ است<p>v1.1</p></div>
+  </div>
+</div>
+
+<!-- مودال پروفایل کاربر -->
+<div class="modal-overlay" id="profile-overlay">
+  <div class="modal-sheet">
+    <div class="modal-head">
+      <h2>👤 پروفایل من</h2>
+      <button class="modal-close" onclick="closeProfile()">✕</button>
+    </div>
+    <div class="profile-msg" id="profile-msg"></div>
+
+    <div class="profile-section">
+      <h3>📇 مشخصات حساب</h3>
+      <div class="profile-readonly"><span>نام کاربری</span><span id="pf-username">—</span></div>
+      <div class="profile-readonly"><span>ایمیل</span><span id="pf-email">—</span></div>
+    </div>
+
+    <div class="profile-section">
+      <h3>📱 شماره تماس (اختیاری)</h3>
+      <div class="auth-field"><input type="tel" id="pf-phone" placeholder="09xxxxxxxxx"></div>
+      <button class="profile-save-btn" onclick="savePhone()">ذخیره شماره تماس</button>
+    </div>
+
+    <div class="profile-section">
+      <h3>🔒 تغییر رمز عبور</h3>
+      <div class="auth-field"><label>رمز فعلی</label><input type="password" id="pf-current-pw"></div>
+      <div class="auth-field"><label>رمز جدید (حداقل ۶ کاراکتر)</label><input type="password" id="pf-new-pw"></div>
+      <div class="auth-field"><label>تکرار رمز جدید</label><input type="password" id="pf-new-pw2"></div>
+      <button class="profile-save-btn" onclick="submitChangePassword()">تغییر رمز عبور</button>
+    </div>
+  </div>
+</div>
+
+<!-- صفحه اجبار تغییر رمز عبور (بعد از ورود با رمز موقت از پشتیبانی) -->
+<div id="force-pw-screen">
+  <div class="fpw-box">
+    <div class="fpw-icon">🔑</div>
+    <h2>لازم است رمز عبور خود را تغییر دهید</h2>
+    <p>رمز شما توسط پشتیبانی بازنشانی شده. لطفاً یک رمز جدید و شخصی انتخاب کنید.</p>
+    <div class="profile-msg" id="force-pw-msg"></div>
+    <div class="auth-field"><label>رمز موقت فعلی</label><input type="password" id="fpw-current"></div>
+    <div class="auth-field"><label>رمز جدید (حداقل ۶ کاراکتر)</label><input type="password" id="fpw-new"></div>
+    <div class="auth-field"><label>تکرار رمز جدید</label><input type="password" id="fpw-new2"></div>
+    <button class="auth-btn" onclick="submitForcedPasswordChange()">تنظیم رمز جدید و ورود</button>
   </div>
 </div>
 
@@ -480,7 +554,11 @@ function doLogin(){
       if(data.success){
         localStorage.setItem('app_token',data.token);
         localStorage.setItem('app_username',data.username);
-        showMainScreen(data.username);
+        if(data.force_password_change){
+          showForcePasswordScreen();
+        } else {
+          showMainScreen(data.username);
+        }
       } else { showAuthMsg(data.message,'error'); }
     },
     function(err){ setAuthLoading(false); showAuthMsg(err,'error'); }
@@ -490,10 +568,11 @@ function doLogin(){
 function doRegister(){
   var username=document.getElementById('reg-username').value.trim();
   var email=document.getElementById('reg-email').value.trim();
+  var phone=document.getElementById('reg-phone').value.trim();
   var password=document.getElementById('reg-password').value;
   if(!username||!email||!password){showAuthMsg('لطفاً همه فیلدها را پر کنید','error');return;}
   setAuthLoading(true); hideAuthMsg();
-  httpPost(API_BASE+'/app-register.php',{username:username,email:email,password:password},
+  httpPost(API_BASE+'/app-register.php',{username:username,email:email,phone:phone,password:password},
     function(data){
       setAuthLoading(false);
       if(data.success){
@@ -510,7 +589,100 @@ function doLogout(){
   localStorage.removeItem('app_token');
   localStorage.removeItem('app_username');
   document.getElementById('main-screen').style.display='none';
+  document.getElementById('force-pw-screen').style.display='none';
+  document.getElementById('profile-overlay').classList.remove('open');
   document.getElementById('auth-screen').style.display='flex';
+}
+
+// ===== اجبار تغییر رمز عبور (بعد از ریست دستی توسط پشتیبانی) =====
+function showForcePasswordScreen(){
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('main-screen').style.display='none';
+  document.getElementById('force-pw-screen').style.display='flex';
+}
+function submitForcedPasswordChange(){
+  var current=document.getElementById('fpw-current').value;
+  var pw1=document.getElementById('fpw-new').value;
+  var pw2=document.getElementById('fpw-new2').value;
+  var msgEl=document.getElementById('force-pw-msg');
+  msgEl.style.display='none';
+  if(!current||!pw1||!pw2){ msgEl.textContent='لطفاً همه فیلدها را پر کنید'; msgEl.className='profile-msg error'; msgEl.style.display='block'; return; }
+  if(pw1.length<6){ msgEl.textContent='رمز جدید باید حداقل ۶ کاراکتر باشد'; msgEl.className='profile-msg error'; msgEl.style.display='block'; return; }
+  if(pw1!==pw2){ msgEl.textContent='تکرار رمز جدید مطابقت ندارد'; msgEl.className='profile-msg error'; msgEl.style.display='block'; return; }
+
+  var token=localStorage.getItem('app_token');
+  httpPost(API_BASE+'/app-change-password.php',{token:token,current_password:current,new_password:pw1},
+    function(data){
+      if(data.success){
+        document.getElementById('force-pw-screen').style.display='none';
+        showMainScreen(localStorage.getItem('app_username'));
+      } else {
+        msgEl.textContent=data.message; msgEl.className='profile-msg error'; msgEl.style.display='block';
+      }
+    },
+    function(err){ msgEl.textContent=err; msgEl.className='profile-msg error'; msgEl.style.display='block'; }
+  );
+}
+
+// ===== پروفایل کاربر =====
+function openProfile(){
+  document.getElementById('profile-overlay').classList.add('open');
+  document.getElementById('profile-msg').style.display='none';
+  document.getElementById('pf-current-pw').value='';
+  document.getElementById('pf-new-pw').value='';
+  document.getElementById('pf-new-pw2').value='';
+  loadProfileData();
+}
+function closeProfile(){
+  document.getElementById('profile-overlay').classList.remove('open');
+}
+function showProfileMsg(msg,type){
+  var el=document.getElementById('profile-msg');
+  el.textContent=msg; el.className='profile-msg '+type; el.style.display='block';
+}
+function loadProfileData(){
+  var token=localStorage.getItem('app_token');
+  httpPost(API_BASE+'/app-profile.php',{token:token,action:'get'},
+    function(data){
+      if(data.success){
+        document.getElementById('pf-username').textContent=data.username;
+        document.getElementById('pf-email').textContent=data.email;
+        document.getElementById('pf-phone').value=data.phone||'';
+      } else { showProfileMsg(data.message,'error'); }
+    },
+    function(err){ showProfileMsg(err,'error'); }
+  );
+}
+function savePhone(){
+  var phone=document.getElementById('pf-phone').value.trim();
+  var token=localStorage.getItem('app_token');
+  httpPost(API_BASE+'/app-profile.php',{token:token,action:'update_phone',phone:phone},
+    function(data){
+      showProfileMsg(data.message, data.success?'success':'error');
+    },
+    function(err){ showProfileMsg(err,'error'); }
+  );
+}
+function submitChangePassword(){
+  var current=document.getElementById('pf-current-pw').value;
+  var pw1=document.getElementById('pf-new-pw').value;
+  var pw2=document.getElementById('pf-new-pw2').value;
+  if(!current||!pw1||!pw2){ showProfileMsg('لطفاً همه فیلدهای رمز عبور را پر کنید','error'); return; }
+  if(pw1.length<6){ showProfileMsg('رمز جدید باید حداقل ۶ کاراکتر باشد','error'); return; }
+  if(pw1!==pw2){ showProfileMsg('تکرار رمز جدید مطابقت ندارد','error'); return; }
+
+  var token=localStorage.getItem('app_token');
+  httpPost(API_BASE+'/app-change-password.php',{token:token,current_password:current,new_password:pw1},
+    function(data){
+      showProfileMsg(data.message, data.success?'success':'error');
+      if(data.success){
+        document.getElementById('pf-current-pw').value='';
+        document.getElementById('pf-new-pw').value='';
+        document.getElementById('pf-new-pw2').value='';
+      }
+    },
+    function(err){ showProfileMsg(err,'error'); }
+  );
 }
 
 function showMainScreen(username){
@@ -526,7 +698,12 @@ function checkSavedToken(){
   var token=localStorage.getItem('app_token');
   if(!token){return;}
   httpPost(API_BASE+'/app-verify.php',{token:token},
-    function(data){ if(data.success){ showMainScreen(data.username); } },
+    function(data){
+      if(data.success){
+        if(data.force_password_change){ showForcePasswordScreen(); }
+        else { showMainScreen(data.username); }
+      }
+    },
     function(){}
   );
 }
