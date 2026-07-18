@@ -18,12 +18,20 @@ import android.view.View;
 import android.widget.ProgressBar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends Activity {
 
     private WebView webView;
     private ProgressBar progressBar;
     private static final int NOTIFICATION_PERMISSION_CODE = 100;
+
+    // نگاشت دامنه‌ی هر پیام‌رسان به پکیج اپ آن؛ برای افزودن اپ جدید فقط یک خط اضافه کنید
+    private static final Map<String, String> MESSENGER_PACKAGES = new HashMap<String, String>() {{
+        put("ble.ir", "ir.nasim");          // بله
+        put("rubika.ir", "ir.resaneh1.iptv"); // روبیکا
+    }};
 
     @SuppressLint({"SetJavaScriptEnabled"})
     @Override
@@ -49,8 +57,15 @@ public class MainActivity extends Activity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                // آدرس‌های عادی سایت داخل همین وب‌ویو باز شوند
-                if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("file://")) {
+                // آدرس‌های عادی سایت داخل همین وب‌ویو باز شوند، مگر اینکه لینک یک پیام‌رسان شناخته‌شده باشد
+                if (url.startsWith("http://") || url.startsWith("https://")) {
+                    if (tryOpenMessengerApp(url)) {
+                        return true;
+                    }
+                    view.loadUrl(url);
+                    return true;
+                }
+                if (url.startsWith("file://")) {
                     view.loadUrl(url);
                     return true;
                 }
@@ -100,6 +115,34 @@ public class MainActivity extends Activity {
 
         // درخواست اجازه نوتیفیکیشن
         requestNotificationPermission();
+    }
+
+    /**
+     * اگر لینک متعلق به یکی از پیام‌رسان‌های شناخته‌شده (بله، روبیکا و...) باشد
+     * و اپ آن روی گوشی نصب باشد، مستقیم همان اپ باز می‌شود.
+     * @return true اگر اپ باز شد (دیگر نیازی به لود شدن در وب‌ویو نیست)
+     */
+    private boolean tryOpenMessengerApp(String url) {
+        try {
+            Uri uri = Uri.parse(url);
+            String host = uri.getHost();
+            if (host == null) return false;
+
+            for (Map.Entry<String, String> entry : MESSENGER_PACKAGES.entrySet()) {
+                if (host.equals(entry.getKey()) || host.endsWith("." + entry.getKey())) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    intent.setPackage(entry.getValue());
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(intent);
+                        return true;
+                    }
+                    return false; // اپ نصب نیست؛ بگذار در وب‌ویو باز شود
+                }
+            }
+        } catch (Exception e) {
+            // نادیده گرفته می‌شود، لینک به‌صورت عادی در وب‌ویو باز خواهد شد
+        }
+        return false;
     }
 
     private void requestNotificationPermission() {

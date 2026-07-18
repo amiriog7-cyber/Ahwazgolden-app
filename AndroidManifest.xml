@@ -6,6 +6,16 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
+    <!-- بدون این بخش، اندروید ۱۱+ اپ‌های نصب‌شده‌ی بله و روبیکا را به دلیل محدودیت package visibility نمی‌بیند -->
+    <queries>
+        <package android:name="ir.nasim"/>
+        <package android:name="ir.resaneh1.iptv"/>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="ble"/>
+        </intent>
+    </queries>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

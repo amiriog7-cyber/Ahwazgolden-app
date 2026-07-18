@@ -45,8 +45,8 @@
     .auth-field input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,0.15); }
     .auth-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--gold), #c9a236); color: #1a1a2e; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; font-family: 'Vazirmatn', Tahoma, sans-serif; box-shadow: 0 4px 15px rgba(212,175,55,0.4); margin-top: 8px; }
     .auth-btn:active { transform: scale(0.98); }
-    .forgot-pw-link { text-align: center; margin-top: 14px; }
-    .forgot-pw-link a { color: var(--gold); font-size: 13px; text-decoration: none; font-weight: 600; }
+    .forgot-pw-link { text-align: center; margin-top: 14px; font-size: 13px; color: var(--light-text); line-height: 2; }
+    .forgot-pw-link a { color: var(--gold); text-decoration: none; font-weight: 700; margin: 0 3px; }
     .forgot-pw-link a:active { opacity: 0.7; }
     .auth-msg { text-align: center; padding: 12px; border-radius: 10px; font-size: 13px; margin-bottom: 14px; display: none; }
     .auth-msg.error { background: rgba(229,62,62,0.1); color: var(--error); border: 1px solid var(--error); }
@@ -180,7 +180,13 @@
       <div class="auth-field"><label>نام کاربری</label><input type="text" id="login-username" placeholder="نام کاربری خود را وارد کنید" autocomplete="off"></div>
       <div class="auth-field"><label>رمز عبور</label><input type="password" id="login-password" placeholder="رمز عبور خود را وارد کنید"></div>
       <button class="auth-btn" onclick="doLogin()">ورود به حساب</button>
-      <div class="forgot-pw-link"><a href="https://ble.ir/amm62" target="_blank" rel="noopener">رمز عبورم را فراموش کرده‌ام</a></div>
+      <div class="forgot-pw-link">
+        <span>رمز عبورم را فراموش کرده‌ام، از طریق</span>
+        <a href="https://ble.ir/amm62" target="_blank" rel="noopener">بله</a>
+        <span>یا</span>
+        <a href="https://rubika.ir/Ahwazgolden_coin" target="_blank" rel="noopener">روبیکا</a>
+        <span>پیام بدهید</span>
+      </div>
     </div>
     <div class="auth-form" id="form-register">
       <div class="auth-field"><label>نام کاربری</label><input type="text" id="reg-username" placeholder="نام کاربری دلخواه" autocomplete="off"></div>
