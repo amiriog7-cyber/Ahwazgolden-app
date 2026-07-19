@@ -140,6 +140,7 @@
     .sr { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 6px; }
     .sv { color: #FFD700; font-weight: 800; font-size: 20px; font-family: 'Vazirmatn', Tahoma, sans-serif; }
     .footer { text-align: center; color: var(--light-text); font-size: 11px; padding: 16px; opacity: 0.6; }
+    .source-note { text-align: center; color: var(--light-text); font-size: 10px; padding: 10px 16px 0; opacity: 0.75; }
     .pulse { animation: pulse .5s ease; }
     @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
     .fade-in { animation: fadeIn 0.4s ease; }
@@ -298,11 +299,10 @@
 
     <div class="sc">
       <div class="st">📊 آمار محاسبات</div>
-      <div class="sr"><span>کل محاسبات سرور:</span><span class="sv" id="server-total">—</span></div>
-      <div class="sr"><span>محاسبات امروز:</span><span class="sv" id="server-today">—</span></div>
       <div class="sr"><span>محاسبات من (این دستگاه):</span><span class="sv" id="cc">۰</span></div>
     </div>
-    <div class="footer">© 2026 Ahwaz Golden — تمامی حقوق محفوظ است<p>v1.1</p></div>
+    <div class="source-note">📌 منبع داده: BrsApi.ir (داده از بانک مرکزی و سامانه سنا)</div>
+    <div class="footer">© 2026 Ahwaz Golden — تمامی حقوق محفوظ است<p>v1.2</p></div>
   </div>
 </div>
 
@@ -323,6 +323,9 @@
     </button>
     <button type="button" class="drawer-item" onclick="openProfile(); toggleDrawer();">
       <span class="ic">👤</span> پروفایل
+    </button>
+    <button type="button" class="drawer-item" onclick="openFeedback(); toggleDrawer();">
+      <span class="ic">💬</span> نظرات و پیشنهادات
     </button>
 
     <div class="drawer-divider"></div>
@@ -371,6 +374,24 @@
       <div class="auth-field"><label>رمز جدید (حداقل ۶ کاراکتر)</label><input type="password" id="pf-new-pw"></div>
       <div class="auth-field"><label>تکرار رمز جدید</label><input type="password" id="pf-new-pw2"></div>
       <button class="profile-save-btn" onclick="submitChangePassword()">تغییر رمز عبور</button>
+    </div>
+  </div>
+</div>
+
+<!-- مودال نظرات و پیشنهادات -->
+<div class="modal-overlay" id="feedback-overlay">
+  <div class="modal-sheet">
+    <div class="modal-head">
+      <h2>💬 نظرات و پیشنهادات</h2>
+      <button class="modal-close" onclick="closeFeedback()">✕</button>
+    </div>
+    <div class="profile-msg" id="feedback-msg"></div>
+    <div class="profile-section">
+      <p style="font-size:12px; color:var(--light-text); margin-bottom:12px;">نظر، پیشنهاد یا مشکلی که با اپ داشتید رو اینجا برامون بنویسید.</p>
+      <div class="auth-field">
+        <textarea id="feedback-text" rows="6" maxlength="2000" placeholder="نظر خود را بنویسید..." style="width:100%; padding:12px; border-radius:10px; border:1px solid var(--input-border); background:var(--input-bg); color:var(--text); font-family:'Vazirmatn', Tahoma, sans-serif; font-size:14px; resize:vertical;"></textarea>
+      </div>
+      <button class="profile-save-btn" onclick="submitFeedback()">ارسال نظر</button>
     </div>
   </div>
 </div>
@@ -592,18 +613,6 @@ function loadGoldToCalc() {
   }
 }
 
-// ===== آمار سرور =====
-function loadServerStats() {
-  httpGet(SITE_BASE + '/server-counter.php', function(data) {
-    if(data.success) {
-      var st = document.getElementById('server-total');
-      var sd = document.getElementById('server-today');
-      if(st) st.textContent = toFa(data.total_count || 0);
-      if(sd) sd.textContent = toFa(data.today_count || 0);
-    }
-  });
-}
-
 // ===== ارسال آمار به سرور =====
 function sendStatsToServer(calcData) {
   // افزایش شمارنده کل
@@ -678,6 +687,7 @@ function doLogout(){
   document.getElementById('main-screen').style.display='none';
   document.getElementById('force-pw-screen').style.display='none';
   document.getElementById('profile-overlay').classList.remove('open');
+  document.getElementById('feedback-overlay').classList.remove('open');
   document.getElementById('drawer').classList.remove('open');
   document.getElementById('drawerOverlay').classList.remove('open');
   document.getElementById('hamburgerBtn').classList.remove('open');
@@ -729,6 +739,32 @@ function closeProfile(){
 function showProfileMsg(msg,type){
   var el=document.getElementById('profile-msg');
   el.textContent=msg; el.className='profile-msg '+type; el.style.display='block';
+}
+
+// ===== نظرات و پیشنهادات =====
+function openFeedback(){
+  document.getElementById('feedback-overlay').classList.add('open');
+  document.getElementById('feedback-msg').style.display='none';
+  document.getElementById('feedback-text').value='';
+}
+function closeFeedback(){
+  document.getElementById('feedback-overlay').classList.remove('open');
+}
+function showFeedbackMsg(msg,type){
+  var el=document.getElementById('feedback-msg');
+  el.textContent=msg; el.className='profile-msg '+type; el.style.display='block';
+}
+function submitFeedback(){
+  var message=document.getElementById('feedback-text').value.trim();
+  if(!message){ showFeedbackMsg('لطفاً متن نظر خود را بنویسید','error'); return; }
+  var token=localStorage.getItem('app_token');
+  httpPost(API_BASE+'/app-feedback.php',{token:token,message:message},
+    function(data){
+      showFeedbackMsg(data.message, data.success?'success':'error');
+      if(data.success){ document.getElementById('feedback-text').value=''; }
+    },
+    function(err){ showFeedbackMsg(err,'error'); }
+  );
 }
 function loadProfileData(){
   var token=localStorage.getItem('app_token');
@@ -782,7 +818,6 @@ function showMainScreen(username){
   var avatarEl=document.getElementById('drawerAvatar');
   if(avatarEl) avatarEl.textContent = username ? username.charAt(0).toUpperCase() : '?';
   updateDate(); updateClock();
-  loadServerStats();
   loadPrices();
   loadDrawerJoinDate();
 }
@@ -890,9 +925,6 @@ function calc(){
       username: localStorage.getItem('app_username') || 'unknown',
       source: 'android_app'
     });
-
-    // آپدیت آمار سرور
-    setTimeout(function(){ loadServerStats(); }, 1500);
 
     ['g1','g2','g3','g4','g5'].forEach(function(i){
       var el=document.getElementById(i).querySelector('input');
