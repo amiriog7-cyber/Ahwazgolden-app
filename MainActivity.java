@@ -16,6 +16,7 @@ import android.webkit.WebViewClient;
 import android.webkit.WebChromeClient;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class MainActivity extends Activity {
     private WebView webView;
     private ProgressBar progressBar;
     private static final int NOTIFICATION_PERMISSION_CODE = 100;
+    private String currentPage = "calculator.html";
 
     // نگاشت دامنه‌ی هر پیام‌رسان به پکیج اپ آن؛ برای افزودن اپ جدید فقط یک خط اضافه کنید
     private static final Map<String, String> MESSENGER_PACKAGES = new HashMap<String, String>() {{
@@ -57,15 +59,20 @@ public class MainActivity extends Activity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                // اگر لینک به صفحات داخلی اشاره داره
+                if (url.startsWith("file:///android_asset/")) {
+                    // استخراج نام فایل از مسیر
+                    String fileName = url.substring(url.lastIndexOf("/") + 1);
+                    currentPage = fileName;
+                    view.loadUrl(url);
+                    return true;
+                }
+                
                 // آدرس‌های عادی سایت داخل همین وب‌ویو باز شوند، مگر اینکه لینک یک پیام‌رسان شناخته‌شده باشد
                 if (url.startsWith("http://") || url.startsWith("https://")) {
                     if (tryOpenMessengerApp(url)) {
                         return true;
                     }
-                    view.loadUrl(url);
-                    return true;
-                }
-                if (url.startsWith("file://")) {
                     view.loadUrl(url);
                     return true;
                 }
@@ -93,9 +100,14 @@ public class MainActivity extends Activity {
                 }
                 return true;
             }
+            
             @Override
             public void onPageFinished(WebView view, String url) {
                 progressBar.setVisibility(View.GONE);
+                // به‌روزرسانی currentPage بعد از بارگذاری کامل
+                if (url.startsWith("file:///android_asset/")) {
+                    currentPage = url.substring(url.lastIndexOf("/") + 1);
+                }
             }
         });
 
@@ -111,10 +123,45 @@ public class MainActivity extends Activity {
             }
         });
 
-        webView.loadUrl("file:///android_asset/calculator.html");
+        // بارگذاری صفحه پیش‌فرض
+        loadPage("calculator.html");
 
         // درخواست اجازه نوتیفیکیشن
         requestNotificationPermission();
+    }
+
+    // متدهای ناوبری بین صفحات
+    public void openCalculator(View view) {
+        loadPage("calculator.html");
+    }
+
+    public void openNews(View view) {
+        loadPage("news.html");
+    }
+
+    public void openPrices(View view) {
+        loadPage("live-prices.html");
+    }
+
+    public void openGold(View view) {
+        loadPage("live-prices-gold.html");
+    }
+
+    public void openCrypto(View view) {
+        loadPage("live-prices-crypto.html");
+    }
+
+    // متد کمکی برای بارگذاری صفحات
+    private void loadPage(String fileName) {
+        if (fileName.equals(currentPage)) {
+            // اگر همین صفحه هست، ریلود نکن
+            Toast.makeText(this, "همین صفحه باز است", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        String url = "file:///android_asset/" + fileName;
+        webView.loadUrl(url);
+        currentPage = fileName;
     }
 
     /**
