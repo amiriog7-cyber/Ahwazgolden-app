@@ -111,7 +111,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        webView.loadUrl("file:///android_asset/calculator.html");
+        webView.loadUrl("file:///calculator.html");
 
         // درخواست اجازه نوتیفیکیشن
         requestNotificationPermission();
